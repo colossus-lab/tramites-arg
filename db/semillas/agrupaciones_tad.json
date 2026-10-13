@@ -1,0 +1,35 @@
+{
+  "descripcion": "Trámites TAD que son variantes de un mismo trámite (mismo resultado; cambia el tipo de persona, el tipo de obra o el precio). El primero de cada grupo es el canónico; los demás quedan con estado 'fusionado'. Revisado a mano a partir de los candidatos por similitud de nombre dentro de cada organismo; los pares con resultado distinto (inscripción/reinscripción, importación/exportación) no se agrupan.",
+  "grupos": [
+    {"nombre": "SIPRO: inscripción de proveedor", "variantes": [
+      {"id_tad": 430, "nombre": "Persona jurídica", "destinatario": "empresa"},
+      {"id_tad": 3606, "nombre": "Persona humana", "destinatario": "pf_ciudadano"}]},
+    {"nombre": "SIPRO: actualización de proveedor", "variantes": [
+      {"id_tad": 435, "nombre": "Persona jurídica", "destinatario": "empresa"},
+      {"id_tad": 434, "nombre": "Persona humana", "destinatario": "pf_ciudadano"}]},
+    {"nombre": "Presentación de Declaración Jurada de Intereses", "variantes": [
+      {"id_tad": 1079, "nombre": "Persona humana", "destinatario": "pf_ciudadano"},
+      {"id_tad": 1080, "nombre": "Persona jurídica", "destinatario": "empresa"}]},
+    {"nombre": "Licencias Servicios TIC: obtención de licencia", "variantes": [
+      {"id_tad": 2116, "nombre": "Personas humanas", "destinatario": "pf_ciudadano"},
+      {"id_tad": 2117, "nombre": "Personas jurídicas", "destinatario": "empresa"}]},
+    {"nombre": "Licencias Servicios TIC: acceso a Internet para titulares de redes comunitarias (VARC)", "variantes": [
+      {"id_tad": 2569, "nombre": "Personas humanas", "destinatario": "pf_ciudadano"},
+      {"id_tad": 2570, "nombre": "Personas jurídicas", "destinatario": "empresa"}]},
+    {"nombre": "Inicio de reclamo o denuncia sobre cooperativas o mutuales", "variantes": [
+      {"id_tad": 5223, "nombre": "Persona humana", "destinatario": "pf_ciudadano"},
+      {"id_tad": 5222, "nombre": "Persona jurídica", "destinatario": "empresa"}]},
+    {"nombre": "Depósito de obra inédita: primera canción", "variantes": [
+      {"id_tad": 525, "nombre": "Música o letra"},
+      {"id_tad": 529, "nombre": "Música y letra"}]},
+    {"nombre": "Depósito de obra inédita musical", "variantes": [
+      {"id_tad": 527, "nombre": "Música o letra"},
+      {"id_tad": 530, "nombre": "Música y letra"}]},
+    {"nombre": "Renovación de obra inédita musical", "variantes": [
+      {"id_tad": 528, "nombre": "Música o letra"},
+      {"id_tad": 531, "nombre": "Música y letra"}]},
+    {"nombre": "Plan de Reaseguro y Potenciación de la Producción Federal de Hidrocarburos: adhesión", "variantes": [
+      {"id_tad": 5364, "nombre": "Empresas productoras", "destinatario": "empresa"},
+      {"id_tad": 5365, "nombre": "Distribuidoras y subdistribuidoras", "destinatario": "empresa"}]}
+  ]
+}

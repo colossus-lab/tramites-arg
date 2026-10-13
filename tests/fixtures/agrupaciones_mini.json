@@ -1,0 +1,3 @@
+{"grupos": [{"nombre": "Trámite agrupado (fixture)", "variantes": [
+  {"id_tad": 9003, "nombre": "Persona humana", "destinatario": "pf_ciudadano"},
+  {"id_tad": 9004, "nombre": "Persona jurídica", "destinatario": "empresa"}]}]}

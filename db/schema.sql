@@ -147,6 +147,7 @@ CREATE TABLE tramite_variante (
     tramite_id        uuid NOT NULL REFERENCES tramite (id) ON DELETE CASCADE,
     nombre            text NOT NULL,  -- "exprés", "persona jurídica", "extra Mercosur"
     plazo_resolucion  text,
+    tramite_origen_id uuid REFERENCES tramite (id) ON DELETE SET NULL,  -- trámite TAD fusionado del que viene
     UNIQUE (tramite_id, nombre)
 );
 
@@ -155,6 +156,8 @@ CREATE TABLE tramite_destinatario (
     tipo        text NOT NULL CHECK (tipo IN ('pf_ciudadano', 'pf_extranjero_residente', 'pf_no_residente',
                                               'empresa', 'emprendedor', 'organizacion_civil',
                                               'cooperativa_mutual', 'organismo_publico', 'profesional')),
+    origen      text NOT NULL DEFAULT 'manual' CHECK (origen IN ('manual', 'auto')),  -- 'auto' no pisa 'manual'
+    regla       text,  -- regla de ingesta.destinatarios que lo asignó
     PRIMARY KEY (tramite_id, tipo)
 );
 

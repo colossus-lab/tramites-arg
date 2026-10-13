@@ -2,7 +2,7 @@
 
 from argparse import Namespace
 
-from ingesta import clasificar, inventario, tad, tad_detalle, tad_requisitos
+from ingesta import clasificar, inventario, tad, tad_detalle, tad_requisitos, variantes
 from tests.base_db import FIXTURES, BaseDB
 
 
@@ -126,3 +126,27 @@ class InventarioTest(BaseDB):
         self.assertEqual(self.uno("SELECT c.codigo FROM tramite t JOIN categoria c ON c.id = t.categoria_id WHERE t.id = %s",
                                   previo)[0], "viajes")
         self.assertEqual(self.uno("SELECT count(*) FROM costo WHERE tramite_id = %s", nuevo[0])[0], 2)
+
+
+class VariantesTest(BaseDB):
+    def test_agrupacion_idempotente_y_estable_ante_la_ingesta(self):
+        resumen = tad.Resumen()
+        tad.ejecutar(tad.leer_directorio(FIXTURES / "tad_v1", resumen), self.url, resumen=resumen)
+        args = ["--archivo", str(FIXTURES / "agrupaciones_mini.json"), "--database-url", self.url]
+        variantes.main(args)
+        variantes.main(args)
+
+        canonico = self.uno("SELECT tramite_id FROM v_tramite_tad WHERE id_tad = 9003")[0]
+        self.assertEqual(self.uno("SELECT nombre_ciudadano FROM tramite WHERE id = %s", canonico)[0],
+                         "Trámite agrupado (fixture)")
+        self.assertEqual(self.uno("SELECT count(*) FROM tramite_variante WHERE tramite_id = %s", canonico)[0], 2)
+        self.assertEqual(self.uno("SELECT t.estado, t.reemplazado_por_id FROM tramite t JOIN v_tramite_tad v "
+                                  "ON v.tramite_id = t.id WHERE v.id_tad = 9004"), ("fusionado", canonico))
+        self.assertEqual(sorted(t for (t,) in self.todos(
+            "SELECT tipo FROM tramite_destinatario WHERE tramite_id = %s AND origen = 'manual'", canonico)),
+            ["empresa", "pf_ciudadano"])
+
+        # v2 cambia el nombre de 9004 en el CSV: sigue fusionado.
+        resumen = tad.Resumen()
+        tad.ejecutar(tad.leer_directorio(FIXTURES / "tad_v2", resumen), self.url, resumen=resumen)
+        self.assertEqual(self.uno("SELECT estado FROM v_tramite_tad WHERE id_tad = 9004")[0], "fusionado")
