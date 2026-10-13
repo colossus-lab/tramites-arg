@@ -442,7 +442,8 @@ def main():
 
     tamanos = {
         "tramites.json": escribir_json(DATA / "tramites.json", tramites),
-        "indice-busqueda.json": escribir_json(DATA / "indice-busqueda.json", indice),
+        # El índice lo baja el buscador del lado del cliente: va a public/ para no inflar el HTML.
+        "indice-busqueda.json": escribir_json(RAIZ / "web" / "public" / "indice-busqueda.json", indice),
         "organismos.json": escribir_json(DATA / "organismos.json", organismos_publicos, compacto=False),
         "agregados.json": escribir_json(DATA / "agregados.json", agregados, compacto=False),
         "meta.json": escribir_json(DATA / "meta.json", meta, compacto=False),
@@ -475,7 +476,7 @@ def main():
     print(f"Exportados {len(tramites)} trámites ({agregados['totales']['tramites']} contables), "
           f"{len(organismos_publicos)} organismos.")
     for archivo, bytes_ in tamanos.items():
-        print(f"  web/data/{archivo}: {bytes_ / 1e6:.2f} MB")
+        print(f"  {archivo}: {bytes_ / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":

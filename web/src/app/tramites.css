@@ -1,0 +1,160 @@
+/* ============================================================
+   Trámites Arg — componentes propios sobre el sistema editorial de globals.css
+   ============================================================ */
+
+.ta-saltar {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--ed-ink); color: var(--ed-paper) !important; padding: 0.5rem 1rem;
+}
+.ta-saltar:focus { left: 1rem; top: 1rem; }
+.ed-page a:focus-visible, .ed-page button:focus-visible, .ed-page input:focus-visible, .ed-page select:focus-visible {
+  outline: 2px solid var(--ed-vermilion); outline-offset: 2px;
+}
+main { min-height: 60vh; }
+
+.ta-colophon-desc {
+  margin-top: 0.75rem; font-family: var(--ed-body); font-size: 0.85rem; color: var(--ed-ink-2);
+  line-height: 1.5; max-width: 34ch;
+}
+
+/* Hallazgos de la portada */
+.ta-hallazgos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ed-rule); }
+.ta-hallazgo { padding: 2rem 2rem 2.25rem 0; border-bottom: 1px solid var(--ed-rule); height: 100%; }
+.ta-hallazgos > :nth-child(odd) .ta-hallazgo { border-right: 1px solid var(--ed-rule); }
+.ta-hallazgos > :nth-child(even) .ta-hallazgo { padding-left: 2rem; }
+.ta-hallazgo-num {
+  font-family: var(--ed-display); font-weight: 700; font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  letter-spacing: -0.04em; line-height: 1; color: var(--ed-cobalt); font-variant-numeric: tabular-nums;
+}
+.ta-hallazgos > :nth-child(2) .ta-hallazgo-num { color: var(--ed-vermilion); }
+.ta-hallazgos > :nth-child(3) .ta-hallazgo-num { color: var(--ed-chrome); }
+.ta-hallazgos > :nth-child(4) .ta-hallazgo-num { color: var(--ed-ink); }
+.ta-hallazgo-titulo { font-family: var(--ed-display); font-size: 1.15rem; font-weight: 700; margin: 0.75rem 0 0.5rem; color: var(--ed-ink); }
+.ta-hallazgo-texto { color: var(--ed-ink-2); font-size: 0.95rem; line-height: 1.55; max-width: 46ch; }
+.ta-mas { margin-top: 2.5rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+
+/* Fuentes de la portada */
+.ta-fuentes { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ed-rule-strong); }
+.ta-fuente { padding: 1.5rem 1.25rem 1.5rem 0; border-right: 1px solid var(--ed-rule); }
+.ta-fuente + .ta-fuente { padding-left: 1.25rem; }
+.ta-fuente:last-child { border-right: 0; }
+.ta-fuente-num { font-family: var(--ed-mono); font-size: 0.75rem; color: var(--ed-vermilion); letter-spacing: 0.1em; }
+.ta-fuente h3 { font-family: var(--ed-display); font-size: 1.1rem; margin: 0.6rem 0 0.5rem; color: var(--ed-ink); }
+.ta-fuente p { font-size: 0.88rem; line-height: 1.5; color: var(--ed-ink-2); }
+
+/* Treemap con links */
+.ed-page a.ta-treemap-link { color: #06090F; text-decoration: none; transition: filter 140ms ease; }
+.ed-page a.ta-treemap-link:hover { filter: brightness(1.12); }
+
+/* Encabezado de páginas internas */
+.ta-cabecera { padding: 4rem 0 2.5rem; border-bottom: 1px solid var(--ed-rule); }
+.ta-cabecera .ed-display { font-size: clamp(2rem, 4.5vw, 3.6rem); letter-spacing: -0.035em; line-height: 1.05; margin: 1rem 0; color: var(--ed-ink); }
+.ta-cabecera .ed-lead { max-width: 64ch; }
+.ta-migas { font-family: var(--ed-mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--ed-ink-2); display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.ta-migas a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Etiquetas */
+.ta-etiquetas { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.6rem; }
+.ta-etiqueta {
+  font-family: var(--ed-mono); font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase;
+  border: 1px solid var(--ed-rule-strong); padding: 0.15rem 0.45rem; color: var(--ed-ink-2); white-space: nowrap;
+}
+.ta-etiqueta--acento { border-color: var(--ed-vermilion); color: var(--ed-vermilion); }
+.ta-etiqueta--celeste { border-color: var(--ed-cobalt); color: var(--ed-cobalt); }
+.ta-etiqueta--baja { border-style: dashed; }
+
+/* Buscador */
+.ta-select {
+  font: inherit; font-size: 0.85rem; background: transparent; color: var(--ed-ink); border: 0;
+  border-bottom: 1px solid var(--ed-rule-strong); padding: 0.3rem 1.5rem 0.3rem 0; max-width: 100%;
+}
+.ta-select option { background: var(--ed-paper-2); color: var(--ed-ink); }
+.ta-resultados { list-style: none; border-top: 1px solid var(--ed-rule-strong); margin-top: 1.5rem; }
+.ta-resultado { border-bottom: 1px solid var(--ed-rule); }
+.ed-page .ta-resultado a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1.5rem; padding: 1rem 0; text-decoration: none; }
+.ta-resultado-nombre { font-family: var(--ed-display); font-weight: 600; font-size: 1.05rem; color: var(--ed-ink); line-height: 1.3; }
+.ed-page .ta-resultado a:hover .ta-resultado-nombre { color: var(--ed-vermilion); }
+.ta-resultado-org { font-family: var(--ed-mono); font-size: 0.75rem; color: var(--ed-ink-2); text-align: right; white-space: nowrap; }
+.ta-resultado .ta-etiquetas { grid-column: 1 / -1; margin-top: 0; }
+.ta-boton {
+  font-family: var(--ed-body); font-size: 0.85rem; font-weight: 600; padding: 0.6rem 1.1rem; cursor: pointer;
+  background: transparent; color: var(--ed-ink); border: 1px solid var(--ed-rule-strong); border-radius: 2px; margin-top: 1.5rem;
+}
+.ta-boton:hover { border-color: var(--ed-vermilion); color: var(--ed-vermilion); }
+
+/* Ficha de trámite */
+.ta-ficha { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 3rem; padding: 3rem 0 4rem; }
+.ta-ficha-aside { border-left: 1px solid var(--ed-rule); padding-left: 1.75rem; display: flex; flex-direction: column; gap: 1.75rem; align-self: start; position: sticky; top: 1.5rem; }
+.ta-dato dt { font-family: var(--ed-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ed-ink-2); margin-bottom: 0.3rem; }
+.ta-dato dd { font-size: 0.95rem; color: var(--ed-ink); line-height: 1.45; }
+.ta-bloque { padding: 2rem 0; border-top: 1px solid var(--ed-rule); }
+.ta-bloque:first-child { border-top: 0; padding-top: 0; }
+.ta-bloque h2 { font-family: var(--ed-display); font-size: 1.35rem; letter-spacing: -0.01em; margin-bottom: 1rem; color: var(--ed-ink); }
+.ta-bloque h3 { font-family: var(--ed-display); font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--ed-ink); }
+.ta-lista { list-style: none; }
+.ta-lista > li { padding: 0.65rem 0; border-bottom: 1px solid var(--ed-rule); font-size: 0.95rem; line-height: 1.5; color: var(--ed-ink); }
+.ta-lista > li:last-child { border-bottom: 0; }
+.ta-lista-meta { display: block; font-family: var(--ed-mono); font-size: 0.68rem; letter-spacing: 0.05em; color: var(--ed-ink-2); margin-top: 0.2rem; }
+.ta-tabla { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.ta-tabla th { text-align: left; font-family: var(--ed-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ed-ink-2); font-weight: 500; padding: 0.5rem 0.75rem 0.5rem 0; border-bottom: 1px solid var(--ed-rule-strong); }
+.ta-tabla td { padding: 0.7rem 0.75rem 0.7rem 0; border-bottom: 1px solid var(--ed-rule); vertical-align: top; color: var(--ed-ink); }
+.ta-tabla td.ta-num { font-family: var(--ed-mono); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ta-tabla-scroll { overflow-x: auto; }
+.ta-nota { font-size: 0.82rem; color: var(--ed-ink-2); line-height: 1.5; margin-top: 0.75rem; }
+.ta-aviso { border-left: 3px solid var(--ed-vermilion); padding: 0.75rem 1rem; background: var(--ed-paper-2); font-size: 0.9rem; line-height: 1.5; color: var(--ed-ink); margin: 1rem 0; }
+.ta-html { font-size: 0.95rem; line-height: 1.6; color: var(--ed-ink); overflow-wrap: anywhere; }
+.ta-html p, .ta-html ul, .ta-html ol, .ta-html table, .ta-html blockquote { margin: 0 0 0.75rem; }
+.ta-html ul, .ta-html ol { padding-left: 1.25rem; }
+.ta-html li { margin-bottom: 0.3rem; }
+.ta-html h3, .ta-html h4, .ta-html h5 { font-family: var(--ed-display); font-size: 1rem; margin: 1rem 0 0.4rem; }
+.ed-page .ta-html a { color: var(--ed-cobalt); text-decoration: underline; text-underline-offset: 3px; }
+.ta-html table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+.ta-html td, .ta-html th { border: 1px solid var(--ed-rule); padding: 0.35rem 0.5rem; vertical-align: top; }
+details.ta-desplegable { border-top: 1px solid var(--ed-rule); padding: 0.9rem 0; }
+details.ta-desplegable summary { cursor: pointer; font-family: var(--ed-display); font-weight: 600; color: var(--ed-ink); }
+details.ta-desplegable[open] summary { margin-bottom: 0.75rem; }
+.ed-page .ta-enlace { color: var(--ed-cobalt); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+
+/* Gráficos y análisis */
+.ta-chart, .ta-chart-placeholder { width: 100%; }
+.ta-grilla-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
+.ta-panel h3 { font-family: var(--ed-display); font-size: 1.1rem; margin-bottom: 0.35rem; color: var(--ed-ink); }
+.ta-panel > p { font-size: 0.88rem; color: var(--ed-ink-2); margin-bottom: 1rem; line-height: 1.5; max-width: 60ch; }
+
+/* Organismos */
+.ta-organismos { columns: 2; column-gap: 3rem; }
+.ta-ministerio { break-inside: avoid; margin-bottom: 2.25rem; }
+.ta-ministerio h2 { font-family: var(--ed-display); font-size: 1.15rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--ed-rule-strong); margin-bottom: 0.25rem; }
+.ed-page .ta-ministerio h2 a { text-decoration: none; }
+.ta-ministerio ul { list-style: none; }
+.ta-ministerio li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.4rem 0; border-bottom: 1px solid var(--ed-rule); font-size: 0.9rem; }
+.ta-ministerio li span:last-child { font-family: var(--ed-mono); color: var(--ed-ink-2); font-variant-numeric: tabular-nums; }
+
+/* Texto largo (metodología, datos) */
+.ta-prosa { max-width: 72ch; font-size: 1rem; line-height: 1.7; color: var(--ed-ink); }
+.ta-prosa h2 { font-family: var(--ed-display); font-size: 1.5rem; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; }
+.ta-prosa h3 { font-family: var(--ed-display); font-size: 1.1rem; margin: 1.75rem 0 0.5rem; }
+.ta-prosa p, .ta-prosa ul, .ta-prosa ol { margin-bottom: 1rem; }
+.ta-prosa ul, .ta-prosa ol { padding-left: 1.25rem; }
+.ta-prosa li { margin-bottom: 0.35rem; }
+.ed-page .ta-prosa a { color: var(--ed-cobalt); text-decoration: underline; text-underline-offset: 3px; }
+.ta-prosa code { font-family: var(--ed-mono); font-size: 0.85em; background: var(--ed-paper-2); padding: 0.05rem 0.3rem; }
+
+@media (max-width: 1024px) {
+  .ta-ficha { grid-template-columns: 1fr; }
+  .ta-ficha-aside { border-left: 0; padding-left: 0; border-top: 1px solid var(--ed-rule); padding-top: 1.75rem; position: static; }
+  .ta-fuentes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ta-fuente:nth-child(2) { border-right: 0; }
+  .ta-fuente:nth-child(3) { padding-left: 0; }
+}
+@media (max-width: 720px) {
+  .ta-hallazgos, .ta-grilla-2 { grid-template-columns: 1fr; }
+  .ta-hallazgos > :nth-child(odd) .ta-hallazgo { border-right: 0; }
+  .ta-hallazgos > :nth-child(even) .ta-hallazgo { padding-left: 0; }
+  .ta-fuentes { grid-template-columns: 1fr; }
+  .ta-fuente, .ta-fuente + .ta-fuente { border-right: 0; padding-left: 0; border-bottom: 1px solid var(--ed-rule); }
+  .ta-organismos { columns: 1; }
+  .ed-page .ta-resultado a { grid-template-columns: 1fr; }
+  .ta-resultado-org { text-align: left; white-space: normal; }
+  .ta-cabecera { padding-top: 2.5rem; }
+}

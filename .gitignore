@@ -27,3 +27,6 @@ web/next-env.d.ts
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Configuración local de herramientas
+.claude/
