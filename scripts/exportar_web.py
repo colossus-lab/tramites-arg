@@ -231,7 +231,8 @@ def exportar(cur):
         tid = t["id"]
         registro = {
             "slug": t["slug"], "nombre": t["nombre"], "descripcion": t["descripcion"], "estado": t["estado"],
-            "prueba": bool(PRUEBA.search(t["nombre"] or "") or (t["reparticion"] or "").startswith("TESTSADE")),
+            # Por nombre: la repartición TESTSADE también inicia algún trámite real (p. ej. TAD 4598).
+            "prueba": bool(PRUEBA.search(t["nombre"] or "")),
             "organismo": org_publico(t["organismo_id"]),
             "categoria": {"codigo": t["categoria"], "nombre": t["categoria_nombre"]} if t["categoria"] else None,
             "categoria_confianza": "manual" if t["categoria_origen"] == "manual" else CONFIANZA.get(t["categoria_regla"]),

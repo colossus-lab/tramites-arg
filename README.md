@@ -137,6 +137,27 @@ y guarda en `tramite.categoria_regla` qué regla la asignó: `comercio_exterior`
 `palabra_clave` son de confianza alta; `etiqueta` y `ministerio`, de confianza baja. Nunca
 pisa `categoria_origen = 'manual'`.
 
+## Fichas de argentina.gob.ar
+
+```bash
+python -m ingesta.fichas descargar        # ~5,5 h: robots.txt pide 10 s entre pedidos; reanudable
+python -m ingesta.fichas cargar --dry-run
+python -m ingesta.fichas cargar
+```
+
+Lee las fichas `/servicio/<slug>` del sitemap (las rutas `/tramitar`, `/servicios` y `/buscar` están
+bloqueadas por `robots.txt` y no se tocan). Cada ficha se vincula a un trámite existente por número de
+TAD, por similitud de nombre dentro del ministerio o por decisión manual en
+`db/semillas/fichas_vinculos.json`; si no hay vínculo, crea el trámite. Los casos dudosos quedan en
+`data/fichas_candidatos.json` para revisar.
+
+## Variantes y destinatarios
+
+```bash
+python -m ingesta.variantes        # agrupa trámites TAD según db/semillas/agrupaciones_tad.json
+python -m ingesta.destinatarios    # personas, empresas, profesionales, organismos públicos…
+```
+
 ## Orden de una actualización completa
 
 ```bash
@@ -144,10 +165,32 @@ python -m ingesta.tad
 python -m ingesta.tad_detalle descargar
 python -m ingesta.tad_detalle cargar
 python -m ingesta.tad_requisitos
+python -m ingesta.fichas descargar
+python -m ingesta.fichas cargar
 python -m ingesta.inventario
+python -m ingesta.variantes
 python -m ingesta.clasificar
+python -m ingesta.destinatarios
+docker compose exec -T db psql -U tramites -d tramites < scripts/calidad.sql
+python scripts/exportar_web.py
 python scripts/backup.py
 ```
+
+El detalle de cada paso y la regla de conteo están en [docs/metodologia.md](docs/metodologia.md).
+
+## Web
+
+```bash
+cd web
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # genera todas las páginas estáticas
+```
+
+Next.js 16, estática: lee `web/data/` (generado por `scripts/exportar_web.py`) en el build y no
+necesita base de datos ni variables de entorno. El diseño editorial está portado de
+[OpenArg](https://github.com/colossus-lab/openarg_frontend) (MIT, ColossusLab). Se publica en Vercel
+con `web/` como directorio raíz.
 
 ## Backup
 
