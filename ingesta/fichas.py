@@ -209,12 +209,13 @@ def parsear(html):
 
 def canales(datos):
     """Canales que se deducen de la ficha (el canal TAD ya lo aporta la ingesta del CSV)."""
-    resultado = []
+    resultado, plataformas = [], set()
     for url in datos["inicio"]:
         host = urlparse(url).netloc.lower()
         plataforma = next((p for h, p in PLATAFORMA_POR_HOST if h in host), None)
-        if plataforma == "tad":
-            continue
+        if plataforma == "tad" or (plataforma and plataforma in plataformas):
+            continue  # un canal por plataforma (el primer botón de inicio)
+        plataformas.add(plataforma)
         resultado.append({"modalidad": "online", "plataforma": plataforma, "url": url})
     texto = n.clave(" ".join(BeautifulSoup(datos["secciones"].get(s, ""), "html.parser").get_text(" ")
                              for s in ("como", "necesito")))
@@ -377,7 +378,11 @@ class Cargador:
                 return tramite_id, "id_tad"
         if organismo_id and datos["nombre"]:
             fila = self.similar(datos["nombre"], organismo_id)
-            if fila and fila[2] >= SIMILITUD_AUTOMATICA:
+            # Nombres muy cortos ("Autorización de importación") se parecen a cualquier cosa: van a revisión.
+            especifico = min(len(n.clave(datos["nombre"]).split()), len(n.clave(fila[1]).split())) >= 4 if fila else False
+            if fila and fila[2] >= SIMILITUD_AUTOMATICA and especifico:
+                self.candidatos.append({"ficha": slug_ficha, "nombre": datos["nombre"], "candidato": fila[1],
+                                        "similitud": round(fila[2], 2), "vinculado": True})
                 return fila[0], "similitud"
             if fila and fila[2] >= SIMILITUD_CANDIDATA:
                 self.candidatos.append({"ficha": slug_ficha, "nombre": datos["nombre"], "candidato": fila[1],

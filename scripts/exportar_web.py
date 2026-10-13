@@ -390,7 +390,7 @@ def escribir_json(ruta, datos, compacto=True):
 def escribir_csv(ruta, columnas, filas):
     ruta.parent.mkdir(parents=True, exist_ok=True)
     with ruta.open("w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(columnas)
         w.writerows(filas)
 
