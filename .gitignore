@@ -1,0 +1,7 @@
+# Descargas crudas (se regeneran con las ingestas) y backups de la base
+data/
+backups/
+
+__pycache__/
+*.pyc
+.venv/

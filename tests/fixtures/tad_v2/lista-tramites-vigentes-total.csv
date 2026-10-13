@@ -1,0 +1,5 @@
+ID_TRAMITE,NOMBRE_TRAMITE,ORGANO_RECTOR,FECHA_PUBLICACION_PROD,MARCA_ARANCELADO,LINK_DE_ACCESO,VALIDADOR_IDENTIDAD
+9001,Solicitud de apostilla (fixture),Ministerio de Relaciones Exteriores,2019-05-02,SI,https://tramitesadistancia.gob.ar/tramitesadistancia/detalle-tipo?id=9001,"Mi argentina,AFIP"
+9003,Credencial de legítimo usuario (fixture),ANMaC,2023-08-10,SI,https://tramitesadistancia.gob.ar/tramitesadistancia/detalle-tipo?id=9003,"DNI,Mi argentina,ANSES,AFIP"
+9004,Licencia TIC para personas humanas (fixture),Ente Nacional de Comunicaciones,2026-02-20,NO,https://tramitesadistancia.gob.ar/tramitesadistancia/detalle-tipo?id=9004,"AFIP,Firma remota"
+9005,Registro de operador postal (fixture),Ente Nacional de Comunicaciones,2026-03-01,NO,https://tramitesadistancia.gob.ar/tramitesadistancia/detalle-tipo?id=9005,AFIP

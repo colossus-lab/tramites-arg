@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: tramites
+      POSTGRES_USER: tramites
+      POSTGRES_PASSWORD: tramites
+    ports:
+      - "5433:5432"
+    volumes:
+      # Se aplican solo al crear el volumen por primera vez.
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - ./db/organismos_apn.sql:/docker-entrypoint-initdb.d/03_organismos_apn.sql:ro
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
