@@ -4,7 +4,8 @@
     python -m ingesta.destinatarios --dry-run       muestra el resultado y deshace
     python -m ingesta.destinatarios --muestras 5    ejemplos por destinatario para revisar
 
-Un trámite puede tener varios destinatarios. Se asignan por palabras del nombre, por el
+Un trámite puede tener varios destinatarios. Se asignan por palabras del nombre (y del
+"¿A quién está dirigido?" de la ficha de argentina.gob.ar, si la tiene), por el
 validador de identidad de TAD y, si nada coincide, por la categoría. Los trámites con
 algún destinatario manual (inventario) no se tocan.
 """
@@ -99,7 +100,10 @@ def main(argv=None):
     try:
         with conn, conn.cursor() as cur:
             cur.execute(
-                """SELECT t.id, t.nombre_ciudadano, c.codigo,
+                """SELECT t.id, t.nombre_ciudadano || coalesce(' ' || (SELECT string_agg(fi.datos ->> 'dirigido', ' ')
+                                                                 FROM fuente fi WHERE fi.tramite_id = t.id
+                                                                 AND fi.tipo = 'ficha_argentina_gob_ar'), ''),
+                          c.codigo,
                           coalesce(csv.datos -> 'validadores', '[]'::jsonb),
                           coalesce((SELECT jsonb_object_agg(d.tipo, d.regla) FROM tramite_destinatario d
                                     WHERE d.tramite_id = t.id AND d.origen = 'auto'), '{}'::jsonb)

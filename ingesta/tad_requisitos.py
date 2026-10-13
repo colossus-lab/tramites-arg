@@ -51,13 +51,13 @@ def sincronizar_requisitos(cur, fuente_id, tramite_id, requisitos):
     return True
 
 
-def sincronizar_costos(cur, fuente_id, tramite_id, costos):
+def sincronizar_costos(cur, fuente_id, tramite_id, costos, concepto=CONCEPTO_COSTO):
     deseados = {c.unidad: (c.gratuito, dos_decimales(c.monto_min), dos_decimales(c.monto_max), c.detalle)
                 for c in costos}
     cur.execute(
         """SELECT id, unidad, gratuito, monto_min, monto_max, detalle FROM costo
            WHERE fuente_id = %s AND concepto = %s AND vigente_hasta IS NULL""",
-        (fuente_id, CONCEPTO_COSTO),
+        (fuente_id, concepto),
     )
     actuales = {fila[1]: (fila[0], tuple(fila[2:])) for fila in cur.fetchall()}
     cambio = False
@@ -71,7 +71,7 @@ def sincronizar_costos(cur, fuente_id, tramite_id, costos):
         cur.execute(
             """INSERT INTO costo (tramite_id, concepto, gratuito, monto_min, monto_max, unidad, fuente_id, detalle)
                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-            (tramite_id, CONCEPTO_COSTO, gratuito, minimo, maximo, unidad, fuente_id, detalle),
+            (tramite_id, concepto, gratuito, minimo, maximo, unidad, fuente_id, detalle),
         )
         cambio = True
     return cambio

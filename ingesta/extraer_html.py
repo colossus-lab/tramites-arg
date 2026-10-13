@@ -225,6 +225,10 @@ def costos(html):
     for tipo, texto, _ in lineas(html):
         k = n.clave(texto)
         if tipo == "titulo":
+            # Dentro de la sección de costo, una línea en negrita ("Gratuito", "$ 45.000") es contenido.
+            if en_costo and not (texto.startswith("¿") or texto.endswith(":")):
+                contexto.append((texto, True))
+                continue
             en_costo = bool(TITULO_COSTO.search(k))
             # El título puede traer el monto: "Costo: $ 45.000"
             if en_costo and MONTO.search(texto):
@@ -238,7 +242,8 @@ def costos(html):
         k = n.clave(oracion)
         montos = list(MONTO.finditer(oracion))
         if not montos:
-            if GRATUITO.search(k) and (en_seccion or "TRAMITE" in k):
+            # Dentro de la sección de costo alcanza con "Gratuito"; fuera, hace falta una frase completa.
+            if (en_seccion and (GRATUITO.search(k) or "GRATUIT" in k)) or (GRATUITO.search(k) and "TRAMITE" in k):
                 gratuito = True
             continue
         if NO_ES_COSTO.search(k) or not (en_seccion or PALABRAS_COSTO.search(k)):
