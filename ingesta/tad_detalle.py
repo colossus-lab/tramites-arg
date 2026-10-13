@@ -162,6 +162,7 @@ def nombres_por_sigla(registros):
 class ResolvedorOrganismos:
     """Sigla GDE (lo que sigue al '#' de la repartición) -> organismo.
 
+    0. (En reparticion()) si la repartición completa "DNDA#MJ" tiene alias, gana.
     1. Si la sigla ya tiene alias, usa ese organismo (siguiendo sucesores).
     2. Si una etiqueta la nombra ("Nombre - SIGLA"), usa el organismo con ese
        nombre o lo crea, colgado del ministerio de ORGANO_RECTOR.
@@ -193,6 +194,15 @@ class ResolvedorOrganismos:
                VALUES (normalizar_texto(%s), %s, %s, %s) ON CONFLICT (alias_normalizado) DO NOTHING""",
             (texto, texto, organismo_id, origen),
         )
+
+    def reparticion(self, reparticion):
+        """Alias de la repartición completa ("DNDA#MJ"): una dependencia mapeada a mano gana sobre la sigla."""
+        if not reparticion or "#" not in reparticion:
+            return None
+        clave = ("reparticion", reparticion)
+        if clave not in self.cache:
+            self.cache[clave] = self.alias(reparticion)
+        return self.cache[clave]
 
     def __call__(self, sigla):
         if sigla not in self.cache:
@@ -287,7 +297,9 @@ def aplicar(cur, corrida_id, registros, resumen):
 
         # Se resuelve siempre (no solo ante cambios) para que un alias nuevo se aplique
         # en la próxima carga. La descripción se toma del detalle salvo edición manual.
-        organismo_id = (resolver(datos["organismo_gde"]) if datos["organismo_gde"] else None) or ministerio_id
+        organismo_id = (resolver.reparticion(datos["reparticion_iniciadora"])
+                        or (resolver(datos["organismo_gde"]) if datos["organismo_gde"] else None)
+                        or ministerio_id)
         cur.execute(
             """UPDATE tramite
                SET organismo_id = %(organismo)s,

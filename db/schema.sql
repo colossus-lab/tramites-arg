@@ -120,7 +120,9 @@ CREATE TABLE tramite (
     descripcion                text,
     organismo_id               integer NOT NULL REFERENCES organismo (id),
     categoria_id               integer REFERENCES categoria (id),
-    estado                     text NOT NULL DEFAULT 'vigente'
+    categoria_origen           text CHECK (categoria_origen IN ('manual', 'auto')),  -- 'auto' no pisa 'manual'
+    categoria_regla            text,  -- regla de ingesta.clasificar que la asignó
+    estado                    text NOT NULL DEFAULT 'vigente'
                                CHECK (estado IN ('vigente', 'migrado', 'baja', 'suspendido', 'fusionado')),
     reemplazado_por_id         uuid REFERENCES tramite (id),
     norma_base                 text,
@@ -227,6 +229,7 @@ CREATE TABLE canal (
     url_inicio        text,
     requiere_turno    boolean,
     acepta_apoderado  boolean,
+    detalle           text,
     activo            boolean NOT NULL DEFAULT true,
     fuente_id         integer REFERENCES fuente (id)  -- canal mantenido por una ingesta; NULL = carga manual
 );

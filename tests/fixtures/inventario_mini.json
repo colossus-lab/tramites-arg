@@ -1,0 +1,15 @@
+{
+  "tramites": [
+    {"id": "N-001", "accion": "nuevo", "nombre": "Trámite de prueba con variantes", "organismo": "RENAR",
+     "categoria": "armas", "destinatarios": ["pf_ciudadano"], "hechos_vitales": ["viajar"],
+     "canales": [{"modalidad": "online", "plataforma": "mi_argentina", "autenticacion": [{"metodo": "clave_fiscal", "nivel_minimo": 2}]}],
+     "variantes": ["Común", "Exprés"],
+     "costos": [{"variante": "Común", "monto": 100}, {"variante": "Exprés", "monto": 200, "norma": "Res. 1/2026"}],
+     "requisitos": [{"texto": "DNI"}, {"texto": "Trámite previo", "tipo": "tramite_previo", "previo": "N-003"}]},
+    {"id": "N-002", "accion": "incluido_en", "en": "N-001"},
+    {"id": "N-003", "accion": "enriquecer", "id_tad": 9001, "categoria": "viajes", "destinatarios": ["empresa"]},
+    {"id": "N-004", "accion": "omitir", "motivo": "paraguas"},
+    {"id": "B-001", "accion": "nuevo", "estado": "baja", "reemplazado_por": "N-001", "nombre": "Trámite dado de baja",
+     "organismo": "ANMAC", "categoria": "armas"}
+  ]
+}

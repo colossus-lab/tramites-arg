@@ -74,7 +74,18 @@ BEGIN
             ('Junta de Seguridad en el Transporte', 'JST', 'ente_descentralizado', 'MECON', 'JST'),
             ('Instituto Nacional Central Único Coordinador de Ablación e Implante', 'INCUCAI',
                 'ente_descentralizado', 'MSAL', 'INCUCAI'),
-            ('Consejo Nacional de Coordinación de Políticas Sociales', 'CNCPS', NULL, 'MCH', 'CNCPS')
+            ('Consejo Nacional de Coordinación de Políticas Sociales', 'CNCPS', NULL, 'MCH', 'CNCPS'),
+            -- Organismos del inventario de la Etapa 1. Para dependencias de un ministerio
+            -- el código GDE es la repartición completa ("DNDA#MJ"), no solo la sigla.
+            ('Registro Nacional de Reincidencia', 'RNR', 'registro', 'MJ', 'RNR'),
+            ('Dirección Nacional de los Registros Nacionales de la Propiedad del Automotor y de Créditos Prendarios',
+                'DNRPA', 'registro', 'MJ', 'DNRPA'),
+            ('Dirección Nacional del Derecho de Autor', 'DNDA', 'registro', 'MJ', 'DNDA#MJ'),
+            ('Instituto Nacional de la Propiedad Industrial', 'INPI', 'ente_autarquico', 'MECON', 'INPI'),
+            ('Secretaría de Industria y Comercio', 'SIYC', 'secretaria', 'MECON', 'SIYC'),
+            ('Secretaría de Trabajo, Empleo y Seguridad Social', 'STEYSS', 'secretaria', 'MCH', 'STEYSS'),
+            ('NIC Argentina (Dirección Nacional del Registro de Dominios de Internet)', 'NIC Argentina',
+                'registro', 'SLYT', 'DNRDI#SLYT')
         ) AS t (nombre, sigla, tipo, padre_sigla, codigo_gde)
     LOOP
         SELECT organismo_id INTO v_id FROM organismo_alias WHERE alias_normalizado = normalizar_texto(o.nombre);

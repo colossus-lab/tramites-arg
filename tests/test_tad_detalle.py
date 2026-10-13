@@ -2,7 +2,7 @@
 
 from argparse import Namespace
 
-from ingesta import tad, tad_detalle, tad_requisitos
+from ingesta import clasificar, inventario, tad, tad_detalle, tad_requisitos
 from tests.base_db import FIXTURES, BaseDB
 
 
@@ -92,3 +92,37 @@ class TadRequisitosTest(BaseDB):
         tad_requisitos.main(["--database-url", self.url])
         self.assertEqual(self.uno("SELECT cambios FROM ingesta_corrida ORDER BY id DESC LIMIT 1")[0], 0)
         self.assertEqual(self.uno("SELECT count(*) FROM costo WHERE concepto = 'arancel (descripción TAD)'")[0], 1)
+
+
+class InventarioTest(BaseDB):
+    def test_carga_idempotente(self):
+        resumen = tad.Resumen()
+        tad.ejecutar(tad.leer_directorio(FIXTURES / "tad_v1", resumen), self.url, resumen=resumen)
+        args = ["--archivo", str(FIXTURES / "inventario_mini.json"), "--database-url", self.url]
+        inventario.main(args)
+
+        nuevo = self.uno("SELECT id, organismo_id, categoria_origen FROM tramite WHERE slug LIKE '%-n-001'")
+        self.assertEqual(nuevo[2], "manual")
+        self.assertEqual(self.uno("SELECT sigla FROM organismo WHERE id = %s", nuevo[1])[0], "RENAR")
+        self.assertEqual(self.todos(
+            """SELECT v.nombre, c.monto_min FROM costo c JOIN tramite_variante v ON v.id = c.variante_id
+               WHERE c.tramite_id = %s ORDER BY c.monto_min""", nuevo[0]),
+            [("Común", 100), ("Exprés", 200)])
+        # El requisito previo apunta al trámite TAD enriquecido.
+        previo = self.uno("SELECT tramite_previo_id FROM requisito WHERE tramite_id = %s AND tipo = 'tramite_previo'", nuevo[0])[0]
+        self.assertEqual(previo, self.uno("SELECT tramite_id FROM v_tramite_tad WHERE id_tad = 9001")[0])
+        self.assertEqual(self.uno("SELECT c.codigo, t.categoria_origen FROM tramite t JOIN categoria c ON c.id = t.categoria_id "
+                                  "WHERE t.id = %s", previo), ("viajes", "manual"))
+        # La baja apunta a su reemplazo, y ANMAC resuelve a RENAR por sucesor.
+        baja = self.uno("SELECT estado, reemplazado_por_id, organismo_id FROM tramite WHERE slug LIKE '%-b-001'")
+        self.assertEqual(baja[:2], ("baja", nuevo[0]))
+        self.assertEqual(baja[2], nuevo[1])
+        self.assertEqual(self.uno("SELECT tramite_id FROM fuente WHERE tipo = 'manual' AND id_externo = 'N-002'")[0], nuevo[0])
+
+        # Segunda corrida: nada cambia; la clasificación automática no pisa las categorías manuales.
+        inventario.main(args)
+        self.assertEqual(self.uno("SELECT sin_cambios, altas FROM ingesta_corrida ORDER BY id DESC LIMIT 1"), (3, 0))
+        clasificar.main(["--database-url", self.url])
+        self.assertEqual(self.uno("SELECT c.codigo FROM tramite t JOIN categoria c ON c.id = t.categoria_id WHERE t.id = %s",
+                                  previo)[0], "viajes")
+        self.assertEqual(self.uno("SELECT count(*) FROM costo WHERE tramite_id = %s", nuevo[0])[0], 2)

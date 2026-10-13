@@ -11,7 +11,8 @@ docker compose up -d
 ```
 
 Levanta PostgreSQL 16 en `localhost:5433` (usuario, clave y base: `tramites`) y aplica
-`db/schema.sql`, `db/seed.sql` y `db/organismos_apn.sql` la primera vez que se crea el volumen. Para recrear la
+`db/schema.sql`, `db/seed.sql` y `db/organismos_apn.sql` la primera vez que se crea el volumen
+(las migraciones de `db/migraciones/` ya están incluidas en `schema.sql`). Para recrear la
 base desde cero: `docker compose down -v && docker compose up -d`.
 
 ```bash
@@ -74,6 +75,49 @@ fuente `api_tad` (`requisito.fuente_id`, `costo.fuente_id`), así una nueva corr
 reemplaza lo que salió de esa descripción. Los costos del texto usan el concepto
 `arancel (descripción TAD)` y guardan la frase de origen en `costo.detalle`; los del CSV
 (`arancel TAD`) no se tocan.
+
+## Inventario curado (trámites fuera de TAD)
+
+```bash
+python -m ingesta.inventario --dry-run
+python -m ingesta.inventario
+```
+
+Carga `db/semillas/inventario_etapa1.json`: las 80 filas de alta demanda y las 8 bajas del
+informe. Cada fila tiene una acción explícita: `nuevo` (DNI, pasaporte, ANSES, ARCA, DNRPA,
+Migraciones…), `enriquecer` (un trámite TAD que ya existe, por `id_tad`), `incluido_en`
+(variante o canal de otra fila, como DNI exprés o antecedentes penales por clave fiscal) u
+`omitir` (filas paraguas que agrupan muchos trámites TAD, con su motivo). Para corregir o
+agregar trámites se edita el JSON y se vuelve a correr: solo se reescriben las filas que cambiaron.
+
+## Clasificación por categoría
+
+```bash
+python -m ingesta.clasificar --dry-run --muestras 10
+python -m ingesta.clasificar
+```
+
+Asigna la categoría (taxonomía de 28 del informe) a los trámites que no tienen una manual,
+y guarda en `tramite.categoria_regla` qué regla la asignó: `comercio_exterior`, `organismo` y
+`palabra_clave` son de confianza alta; `etiqueta` y `ministerio`, de confianza baja. Nunca
+pisa `categoria_origen = 'manual'`.
+
+## Orden de una actualización completa
+
+```bash
+python -m ingesta.tad
+python -m ingesta.tad_detalle descargar
+python -m ingesta.tad_detalle cargar
+python -m ingesta.tad_requisitos
+python -m ingesta.inventario
+python -m ingesta.clasificar
+python scripts/backup.py
+```
+
+## Backup
+
+`python scripts/backup.py` guarda un `pg_dump` en `backups/` (fuera de git) y conserva los
+últimos 10. Restaurar: ver la ayuda del script. Conviene copiar `backups/` a otro disco o nube.
 
 Bases creadas antes de un cambio de esquema se actualizan con los scripts de `db/migraciones/`.
 

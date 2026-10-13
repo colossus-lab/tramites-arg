@@ -46,10 +46,10 @@ class BaseDB(unittest.TestCase):
 
     def uno(self, sql, *params):
         with self.conn.cursor() as cur:
-            cur.execute(sql, params)
+            cur.execute(sql, params or None)
             return cur.fetchone()
 
     def todos(self, sql, *params):
         with self.conn.cursor() as cur:
-            cur.execute(sql, params)
+            cur.execute(sql, params or None)
             return cur.fetchall()
