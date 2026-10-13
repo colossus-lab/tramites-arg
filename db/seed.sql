@@ -48,7 +48,10 @@ INSERT INTO categoria (codigo, nombre) VALUES
     ('ambiente',              'Ambiente'),
     ('cultura',               'Cultura'),
     ('finanzas',              'Finanzas y seguros'),
-    ('transversal',           'Transversal (turnos, credenciales, consultas)');
+    ('transversal',           'Transversal (turnos, credenciales, consultas)'),
+    -- Agregadas al clasificar TAD: la taxonomía del informe no las tenía.
+    ('energia',               'Energía'),
+    ('ciencia_tecnologia',    'Ciencia y tecnología');
 
 INSERT INTO hecho_vital (codigo, nombre) VALUES
     ('nacer',        'Nacer'),

@@ -19,12 +19,22 @@ class ClasificarTest(unittest.TestCase):
 
     def test_ministerio_solo_para_el_ministerio_mismo(self):
         self.assertEqual(clasificar("Autorización para microfilmar", "MSAL", "MSAL", []), ("salud", "ministerio"))
-        self.assertEqual(clasificar("Mesa de entradas virtual", "CNEA", "MECON", []), (None, None))
+        self.assertEqual(clasificar("Autorización de impresión", "IGN", "MECON", []), (None, None))
 
     def test_etiqueta_vuce_no_clasifica(self):
-        self.assertEqual(clasificar("Registro de poseedores de PCB", "JGM", "JGM",
+        self.assertEqual(clasificar("Certificaciones - Consultas legales", "JGM", "JGM",
                                     ["Ventanilla Única de Comercio Exterior - VUCE"]), (None, None))
 
+
+    def test_energia_y_ciencia(self):
+        self.assertEqual(clasificar("Registro de Comercializadores", "ENREGE", "MECON", []), ("energia", "organismo"))
+        self.assertEqual(clasificar("Permiso de exploración de hidrocarburos", "MECON", "MECON", []),
+                         ("energia", "palabra_clave"))
+        self.assertEqual(clasificar("Recurso - Carrera del investigador", "CONICET", "JGM", []),
+                         ("ciencia_tecnologia", "organismo"))
+        self.assertEqual(clasificar("Inscripción de usuarios ante el ROECyT", "JGM", "JGM", []),
+                         ("ciencia_tecnologia", "palabra_clave"))
+        self.assertEqual(clasificar("Informe anual de Universidades Privadas", "MCH", "MCH", [])[0], "educacion")
 
 if __name__ == "__main__":
     unittest.main()
