@@ -1,16 +1,51 @@
 # Trámites Arg
 
-Base de trámites del Estado argentino. Etapa 1: Gobierno Nacional, con el catálogo de
-Trámites a Distancia (TAD) como columna vertebral. El relevamiento que da origen al
-diseño está en `compass_artifact_...markdown.md`.
+Base abierta y análisis de los **trámites del Estado Nacional argentino**: qué trámites
+existen, qué organismo los atiende, cómo se hacen (online, presencial, con qué clave), qué
+requisitos piden y cuánto cuestan. Un proyecto de [Colossus Lab](https://colossuslab.org).
+
+> **Proyecto independiente y no oficial.** No está afiliado al Gobierno de la República
+> Argentina ni a ninguno de sus organismos. Los datos se construyen automáticamente a partir de
+> fuentes públicas y pueden contener errores o estar desactualizados: ante cualquier duda,
+> consultá siempre la fuente oficial enlazada en cada trámite.
+
+## Qué hay en este repositorio
+
+| Carpeta | Contenido |
+|---|---|
+| `db/` | Esquema PostgreSQL, datos base, migraciones y semillas curadas |
+| `ingesta/` | Pipeline en Python: ingesta de TAD, detalle de cada trámite, fichas de argentina.gob.ar, extracción de requisitos y costos, clasificación |
+| `scripts/` | Backup, control de calidad y exportación de datos para la web |
+| `web/` | Sitio de análisis (Next.js, estático) |
+| `tests/` | Tests unitarios y de integración |
+
+## Fuentes
+
+- **TAD**: dataset "Plataforma de Trámites a Distancia" de Jefatura de Gabinete en
+  [datos.gob.ar](https://datos.gob.ar) y el buscador público de tramitesadistancia.gob.ar.
+- **argentina.gob.ar**: fichas públicas de trámites (`/servicio/...`).
+- **Inventario curado** de trámites de alta demanda fuera de TAD (DNI, pasaporte, ANSES, ARCA,
+  Migraciones, DNRPA…), con la fuente oficial citada en cada fila.
+
+Los scrapers se identifican con un User-Agent que enlaza a este repositorio, respetan
+`robots.txt` y sus pausas (10 s entre pedidos a argentina.gob.ar) y no inician sesión en ningún sitio.
+
+## Licencias
+
+- Código: [MIT](LICENSE).
+- Datos exportados: [CC BY 4.0](LICENSE-DATA.md), con atribución a las fuentes.
+
+Ver también [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) y
+[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Puesta en marcha
 
 ```bash
+cp .env.example .env
 docker compose up -d
 ```
 
-Levanta PostgreSQL 16 en `localhost:5433` (usuario, clave y base: `tramites`) y aplica
+Levanta PostgreSQL 16 en `localhost:5433` (usuario y base `tramites`; la clave sale de `.env`) y aplica
 `db/schema.sql`, `db/seed.sql` y `db/organismos_apn.sql` la primera vez que se crea el volumen
 (las migraciones de `db/migraciones/` ya están incluidas en `schema.sql`). Para recrear la
 base desde cero: `docker compose down -v && docker compose up -d`.
@@ -83,8 +118,8 @@ python -m ingesta.inventario --dry-run
 python -m ingesta.inventario
 ```
 
-Carga `db/semillas/inventario_etapa1.json`: las 80 filas de alta demanda y las 8 bajas del
-informe. Cada fila tiene una acción explícita: `nuevo` (DNI, pasaporte, ANSES, ARCA, DNRPA,
+Carga `db/semillas/inventario_etapa1.json`: 80 trámites de alta demanda y 8 bajas o
+migraciones del relevamiento de la Etapa 1. Cada fila tiene una acción explícita: `nuevo` (DNI, pasaporte, ANSES, ARCA, DNRPA,
 Migraciones…), `enriquecer` (un trámite TAD que ya existe, por `id_tad`), `incluido_en`
 (variante o canal de otra fila, como DNI exprés o antecedentes penales por clave fiscal) u
 `omitir` (filas paraguas que agrupan muchos trámites TAD, con su motivo). Para corregir o
@@ -97,7 +132,7 @@ python -m ingesta.clasificar --dry-run --muestras 10
 python -m ingesta.clasificar
 ```
 
-Asigna la categoría (taxonomía de 28 del informe) a los trámites que no tienen una manual,
+Asigna la categoría (taxonomía de 30 categorías en `db/seed.sql`) a los trámites que no tienen una manual,
 y guarda en `tramite.categoria_regla` qué regla la asignó: `comercio_exterior`, `organismo` y
 `palabra_clave` son de confianza alta; `etiqueta` y `ministerio`, de confianza baja. Nunca
 pisa `categoria_origen = 'manual'`.

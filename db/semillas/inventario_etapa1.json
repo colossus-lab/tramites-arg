@@ -1,6 +1,6 @@
 {
-  "documento": "compass_artifact_wf-4f2d3d5d-9994-55b4-a487-1895e4041908_text_markdown.md",
-  "descripcion": "Inventario de trámites de alta demanda de la Etapa 1 (octubre 2026). Cada fila del informe tiene una acción: 'nuevo' crea el trámite; 'enriquecer' completa un trámite TAD existente; 'incluido_en' es una variante o canal de otra fila; 'omitir' es una fila paraguas que agrupa varios trámites TAD o un cambio institucional ya modelado en organismo.",
+  "documento": "Relevamiento interno Etapa 1 (octubre 2026), a partir de fuentes oficiales citadas en cada fila.",
+  "descripcion": "Inventario de trámites de alta demanda de la Etapa 1 (octubre 2026). Cada fila tiene una acción: 'nuevo' crea el trámite; 'enriquecer' completa un trámite TAD existente; 'incluido_en' es una variante o canal de otra fila; 'omitir' es una fila paraguas que agrupa varios trámites TAD o un cambio institucional ya modelado en organismo.",
   "tramites": [
     {
       "id": "N-001", "accion": "nuevo",
@@ -82,10 +82,10 @@
       ],
       "variantes": ["Entrega en 5 días", "Entrega en 24 horas", "Entrega en 6 horas", "Entrega en 1 hora"],
       "costos": [
-        {"variante": "Entrega en 5 días", "monto": 1000, "detalle": "Según la ficha oficial; el informe pide verificar actualización."},
-        {"variante": "Entrega en 24 horas", "monto": 2400, "detalle": "Según la ficha oficial; el informe pide verificar actualización."},
-        {"variante": "Entrega en 6 horas", "monto": 4800, "detalle": "Según la ficha oficial; el informe pide verificar actualización."},
-        {"variante": "Entrega en 1 hora", "monto": 8500, "detalle": "Según la ficha oficial; el informe pide verificar actualización."},
+        {"variante": "Entrega en 5 días", "monto": 1000, "detalle": "Según la ficha oficial; a verificar actualización."},
+        {"variante": "Entrega en 24 horas", "monto": 2400, "detalle": "Según la ficha oficial; a verificar actualización."},
+        {"variante": "Entrega en 6 horas", "monto": 4800, "detalle": "Según la ficha oficial; a verificar actualización."},
+        {"variante": "Entrega en 1 hora", "monto": 8500, "detalle": "Según la ficha oficial; a verificar actualización."},
         {"concepto": "arancel consular", "monto": 30, "unidad": "USD", "detalle": "Ejemplo: USD 30 en la Embajada en Estados Unidos."}
       ],
       "requisitos": [
@@ -153,7 +153,7 @@
       "categoria": "viajes", "destinatarios": ["pf_ciudadano", "empresa"],
       "canales": [{"modalidad": "consular", "detalle": "Legalización o apostilla en consulados en el exterior"}],
       "costos": [
-        {"concepto": "arancel (informe Etapa 1)", "monto": 4500,
+        {"concepto": "arancel (Cancillería)", "monto": 4500,
          "detalle": "Página de Cancillería: \"Por TAD $ 4500\". Legalización de partidas sin apostilla: $1.500. El CSV de TAD informa $1.500 para este trámite."},
         {"concepto": "diligenciamiento consular", "monto_min": 30, "monto_max": 40, "unidad": "USD",
          "detalle": "USD o EUR 30; urgente USD o EUR 40."}
@@ -534,7 +534,7 @@
       "organismo": "AFIP", "categoria": "vehiculos", "destinatarios": ["pf_ciudadano", "empresa"],
       "descripcion": "Eliminado en 2024."
     },
-    {"id": "B-004", "accion": "omitir", "motivo": "60 formularios del régimen registral automotor dados de baja: el informe no los enumera."},
+    {"id": "B-004", "accion": "omitir", "motivo": "60 formularios del régimen registral automotor dados de baja (anuncio oficial del 04/02/2026): no hay un listado público de cuáles son."},
     {"id": "B-005", "accion": "omitir", "motivo": "ANMaC -> RENAR: modelado como sucesor en organismo."},
     {"id": "B-006", "accion": "omitir", "motivo": "ANDIS -> Secretaría Nacional de Discapacidad: modelado como sucesor en organismo."},
     {"id": "B-007", "accion": "omitir", "motivo": "AFIP -> ARCA: modelado como sucesor en organismo."},

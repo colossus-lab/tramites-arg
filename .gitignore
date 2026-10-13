@@ -1,7 +1,29 @@
-# Descargas crudas (se regeneran con las ingestas) y backups de la base
+# Descargas crudas (se regeneran con las ingestas), backups y material privado
 data/
 backups/
+privado/
+*.dump
+*.tmp
 
+# Configuración local
+.env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
 *.pyc
 .venv/
+
+# Web
+node_modules/
+web/.next/
+web/out/
+web/next-env.d.ts
+.vercel
+
+# Editores y sistema
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
