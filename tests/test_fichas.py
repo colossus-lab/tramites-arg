@@ -44,10 +44,11 @@ class CargaTest(BaseDB):
         self.assertEqual(self.uno("SELECT tramite_id FROM fuente WHERE id_externo = 'apostilla-fixture'")[0], tad_9001)
         self.assertEqual(self.uno("SELECT monto_min FROM costo WHERE tramite_id = %s AND concepto = %s",
                                   tad_9001, fichas.CONCEPTO_COSTO)[0], 4500)
-        # La otra crea trámite y organismo (INAMU, a revisar), con canal presencial con turno.
+        # La otra crea el trámite en INAMU (organismo del seed, encontrado por la sigla de la miga),
+        # con canal presencial con turno.
         nuevo = self.uno("""SELECT t.id, o.nombre_oficial, o.sigla, o.revisar FROM tramite t
                             JOIN organismo o ON o.id = t.organismo_id WHERE t.slug = 'registro-de-musicos-fixture-ficha'""")
-        self.assertEqual(nuevo[1:], ("Instituto Nacional de la Música", "INAMU", True))
+        self.assertEqual(nuevo[1:], ("Instituto Nacional de la Música", "INAMU", False))
         self.assertEqual(self.uno("SELECT requiere_turno FROM canal WHERE tramite_id = %s AND modalidad = 'presencial'",
                                   nuevo[0])[0], True)
 
