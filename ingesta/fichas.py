@@ -244,10 +244,13 @@ class Organismos:
         self.cache, self.nuevos = {}, []
 
     def alias(self, texto):
+        # "Servicios Dirección Nacional de Migraciones" -> "Dirección Nacional de Migraciones"
+        texto = re.sub(r"^Servicios\s+(?=[A-ZÁÉÍÓÚ])", "", texto.strip())
         candidatos = [texto]
-        sigla = re.search(r"\(([A-Za-z0-9+]{2,12})\)\s*$", texto)
+        # "Nombre (SIGLA)" o "Nombre - SIGLA"
+        sigla = re.search(r"(?:\(([A-Za-z0-9+]{2,12})\)|\s[-–]\s([A-Z0-9+]{2,12}))\s*$", texto)
         if sigla:
-            candidatos += [sigla.group(1), texto[: sigla.start()].strip()]
+            candidatos += [sigla.group(1) or sigla.group(2), texto[: sigla.start()].strip()]
         for c in candidatos:
             self.cur.execute(
                 "SELECT organismo_actual(organismo_id) FROM organismo_alias WHERE alias_normalizado = normalizar_texto(%s)",
@@ -274,7 +277,10 @@ class Organismos:
         if clave in self.cache:
             return self.cache[clave]
         resueltos = [(m, self.alias(m)) for m in migas]
-        especifica = next((i for i in range(len(migas) - 1, -1, -1) if MIGA_ORGANISMO.match(n.clave(migas[i]))), None)
+        # La miga más específica que nombra un organismo: por su forma ("Dirección Nacional…") o porque ya es
+        # un alias conocido (siglas sueltas como "ANSES" o "Renaper").
+        especifica = next((i for i in range(len(migas) - 1, -1, -1)
+                           if resueltos[i][1] or MIGA_ORGANISMO.match(n.clave(migas[i]))), None)
         organismo_id = None
         if especifica is not None and resueltos[especifica][1]:
             organismo_id = resueltos[especifica][1]
@@ -309,8 +315,8 @@ def cargar_vinculos():
 
 
 class Cargador:
-    def __init__(self, cur, corrida_id, resumen):
-        self.cur, self.corrida_id, self.resumen = cur, corrida_id, resumen
+    def __init__(self, cur, corrida_id, resumen, reprocesar=False):
+        self.cur, self.corrida_id, self.resumen, self.reprocesar = cur, corrida_id, resumen, reprocesar
         self.organismos = Organismos(cur)
         self.vinculos = cargar_vinculos()
         self.candidatos = []
@@ -348,17 +354,23 @@ class Cargador:
         fila = self.cur.fetchone()
         return fila[0] if fila else None
 
-    def similar(self, nombre, organismo_id):
+    def creado_por_ficha(self, tramite_id):
+        self.cur.execute("SELECT slug LIKE %s FROM tramite WHERE id = %s", ("%-ficha", tramite_id))
+        fila = self.cur.fetchone()
+        return bool(fila and fila[0])
+
+    def similar(self, nombre, organismo_id, slug_ficha=None):
         """Trámite más parecido dentro del mismo ministerio (raíz del organismo)."""
         raiz = self.raiz(organismo_id)
         mismos = [o for o in self.padres if self.raiz(o) == raiz] or [organismo_id]
         self.cur.execute(
             """SELECT t.id, t.nombre_ciudadano, similarity(t.nombre_ciudadano, %s) AS s
                FROM tramite t
-               WHERE t.estado NOT IN ('fusionado') AND t.organismo_id = ANY(%s)
-                 AND NOT EXISTS (SELECT 1 FROM fuente f WHERE f.tramite_id = t.id AND f.tipo = %s)
+               WHERE t.estado NOT IN ('fusionado') AND t.organismo_id = ANY(%s) AND t.slug NOT LIKE '%%-ficha'
+                 AND NOT EXISTS (SELECT 1 FROM fuente f WHERE f.tramite_id = t.id AND f.tipo = %s
+                                 AND f.id_externo IS DISTINCT FROM %s)
                ORDER BY s DESC LIMIT 1""",
-            (nombre, mismos, TIPO_FUENTE),
+            (nombre, mismos, TIPO_FUENTE, slug_ficha),
         )
         return self.cur.fetchone()
 
@@ -377,7 +389,7 @@ class Cargador:
             if tramite_id:
                 return tramite_id, "id_tad"
         if organismo_id and datos["nombre"]:
-            fila = self.similar(datos["nombre"], organismo_id)
+            fila = self.similar(datos["nombre"], organismo_id, slug_ficha)
             # Nombres muy cortos ("Autorización de importación") se parecen a cualquier cosa: van a revisión.
             especifico = min(len(n.clave(datos["nombre"]).split()), len(n.clave(fila[1]).split())) >= 4 if fila else False
             if fila and fila[2] >= SIMILITUD_AUTOMATICA and especifico:
@@ -398,13 +410,16 @@ class Cargador:
         datos = n.a_json(datos)
         hash_nuevo = n.hash_registro(datos)
         previa = self.previas.get(slug_ficha)
-        if previa and previa[2] == hash_nuevo and previa[1]:
+        sin_cambios = bool(previa and previa[2] == hash_nuevo and previa[1])
+        if sin_cambios and not self.reprocesar:
             self.resumen["sin_cambios"] += 1
             return
 
         tramite_id, motivo = self.vincular(slug_ficha, datos, organismo_id)
-        if tramite_id is None and previa and previa[1] and motivo == "nuevo":
+        if tramite_id is None and previa and previa[1] and self.creado_por_ficha(previa[1]):
             tramite_id, motivo = previa[1], "previo"  # la ficha ya había creado su trámite
+            self.cur.execute("UPDATE tramite SET organismo_id = %s WHERE id = %s",
+                             (organismo_id or self.organismos.no_informado(), tramite_id))
         if tramite_id is None:
             self.cur.execute(
                 """INSERT INTO tramite (slug, nombre_ciudadano, nombre_oficial, descripcion, organismo_id,
@@ -419,7 +434,10 @@ class Cargador:
                              (datos["descripcion"], tramite_id))
         self.resumen[motivo] += 1
 
-        if previa is None:
+        if sin_cambios:  # --reprocesar: misma ficha, se recalcula lo derivado sin registrar un evento
+            fuente_id, evento = previa[0], "sin_cambios"
+            self.cur.execute("UPDATE fuente SET tramite_id = %s WHERE id = %s", (tramite_id, fuente_id))
+        elif previa is None:
             self.cur.execute(
                 """INSERT INTO fuente (tramite_id, tipo, id_externo, url, datos, hash_contenido, fecha_cambio)
                    VALUES (%s, %s, %s, %s, %s, %s, now()) RETURNING id""",
@@ -433,10 +451,12 @@ class Cargador:
                           fecha_captura = now(), fecha_cambio = now() WHERE id = %s""",
                 (tramite_id, url, Json(datos), hash_nuevo, fuente_id),
             )
-        self.cur.execute(
-            "INSERT INTO fuente_evento (corrida_id, fuente_id, evento, hash_anterior, hash_nuevo) VALUES (%s, %s, %s, %s, %s)",
-            (self.corrida_id, fuente_id, evento, previa[2] if previa else None, hash_nuevo),
-        )
+        if evento != "sin_cambios":
+            self.cur.execute(
+                "INSERT INTO fuente_evento (corrida_id, fuente_id, evento, hash_anterior, hash_nuevo) "
+                "VALUES (%s, %s, %s, %s, %s)",
+                (self.corrida_id, fuente_id, evento, previa[2] if previa else None, hash_nuevo),
+            )
         self.resumen[evento] += 1
 
         self.cur.execute("DELETE FROM canal WHERE fuente_id = %s", (fuente_id,))
@@ -468,7 +488,7 @@ def cargar(args):
         estado, error, cargador = "ok", None, None
         try:
             with conn, conn.cursor() as cur:
-                cargador = Cargador(cur, corrida_id, resumen)
+                cargador = Cargador(cur, corrida_id, resumen, getattr(args, "reprocesar", False))
                 for archivo in archivos:
                     url = indice.get(archivo.stem, {}).get("url", PREFIJO_FICHA + archivo.stem)
                     cargador.cargar(archivo.stem, archivo.read_text(encoding="utf-8"), url)
@@ -517,6 +537,8 @@ def main(argv=None):
     p.set_defaults(funcion=descargar)
     p = sub.add_parser("cargar")
     p.add_argument("--dry-run", action="store_true", help="aplica todo y hace rollback")
+    p.add_argument("--reprocesar", action="store_true",
+                   help="recalcula vínculo, organismo, canales, requisitos y costos aunque la ficha no haya cambiado")
     p.set_defaults(funcion=cargar)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S")

@@ -1,0 +1,306 @@
+{
+ "vinculos": {
+  "cambio-de-razon-social-de-un-establecimiento-comercializador-de-productos-biomedicos": {
+   "accion": "vincular",
+   "con": 4937
+  },
+  "certificado-de-libre-regencia-yo-actuacion-profesional": {
+   "accion": "vincular",
+   "con": 1646
+  },
+  "certificado-medico-oficial": {
+   "accion": "vincular",
+   "con": 2515
+  },
+  "como-obtener-el-certificado-unico-de-discapacidad-cud": {
+   "accion": "vincular",
+   "con": "N-028"
+  },
+  "convalidar-estudios-secundarios-de-intercambio-estudiantil": {
+   "accion": "vincular",
+   "con": "N-073"
+  },
+  "habilitacion-de-una-residencia-asistencial-res-187616": {
+   "accion": "vincular",
+   "con": 2493
+  },
+  "habilitar-playas-de-lavado-y-desinfeccion-de-camiones-para-el-traslado-de-animales-vivos": {
+   "accion": "vincular",
+   "con": 1750
+  },
+  "habilitar-un-establecimiento-farmaceutico": {
+   "accion": "vincular",
+   "con": 1639
+  },
+  "hacer-la-transferencia-de-dominio-de-un-auto-moto-o-maquinaria": {
+   "accion": "vincular",
+   "con": "N-039"
+  },
+  "individualizacion-y-rubrica-de-libros-especiales": {
+   "accion": "vincular",
+   "con": 1565
+  },
+  "iniciar-un-reclamo-ante-defensa-del-consumidor": {
+   "accion": "vincular",
+   "con": "N-047"
+  },
+  "inscribir-en-el-registro-de-productos-veterinarios": {
+   "accion": "vincular",
+   "con": 1933
+  },
+  "inscribirreinscribir-en-el-registro-fitosanitario-algodonero": {
+   "accion": "vincular",
+   "con": 1647
+  },
+  "inscripcion-como-prestador-de-servicio-fraccionamiento-movil": {
+   "accion": "vincular",
+   "con": 1218
+  },
+  "inscripcion-en-el-sistema-de-proveedores-del-estado": {
+   "accion": "vincular",
+   "con": 430
+  },
+  "inscripcion-y-habilitacion-como-oficial-de-proteccion-de-las-instalaciones-portuarias-opip": {
+   "accion": "vincular",
+   "con": 2619
+  },
+  "inscripcion-y-habilitacion-como-organizacion-de-proteccion-reconocida-opr": {
+   "accion": "vincular",
+   "con": 2625
+  },
+  "instructivo-para-solicitar-la-excepcion-al-cabotaje-fluvial-y-maritimo-de-bandera": {
+   "accion": "vincular",
+   "con": 2178
+  },
+  "mesa-de-entradas-virtual-cnce": {
+   "accion": "nuevo"
+  },
+  "ofertar-equipo-para-solicitudes-de-excepcion-con-cabotaje": {
+   "accion": "vincular",
+   "con": 2179
+  },
+  "presentar-contratos-prestacionales": {
+   "accion": "vincular",
+   "con": 2711
+  },
+  "presentar-garantia-de-cumplimiento-de-permiso": {
+   "accion": "vincular",
+   "con": 5848
+  },
+  "presentar-informacion-tecnica-de-empresas-carroceras": {
+   "accion": "vincular",
+   "con": 2369
+  },
+  "presentar-la-declaracion-jurada-de-aportes-art-839-del-rgaa": {
+   "accion": "vincular",
+   "con": 1843
+  },
+  "presentar-la-libreta-de-la-asignacion-universal-por-hijo-auh": {
+   "accion": "vincular",
+   "con": "N-024"
+  },
+  "presentar-la-rendicion-del-programa-fortalecer": {
+   "accion": "vincular",
+   "con": 5883
+  },
+  "presentar-la-rendicion-del-programa-fortalecimiento-de-las-capacidades-institucionales-para": {
+   "accion": "vincular",
+   "con": 5882
+  },
+  "radicaciones-residencia-permanente": {
+   "accion": "vincular",
+   "con": "N-011"
+  },
+  "ratificar-virtualmente-un-acuerdo-espontaneo-entre-trabajadores-y-empleadores-de-casas": {
+   "accion": "vincular",
+   "con": 4554
+  },
+  "realizar-un-pedido-de-informes-la-igj": {
+   "accion": "vincular",
+   "con": 449
+  },
+  "reclamar-por-incumplimiento-de-una-solicitud-de-acceso-la-informacion-publica": {
+   "accion": "vincular",
+   "con": 1731
+  },
+  "rectificar-una-disposicion": {
+   "accion": "vincular",
+   "con": 2263
+  },
+  "registrar-entidad-previsional": {
+   "accion": "vincular",
+   "con": 5520
+  },
+  "registrar-obsequios-y-viajes-como-funcionario-publico": {
+   "accion": "vincular",
+   "con": 2676
+  },
+  "renovar-el-certificado-nautico-deportivo-por-vencimiento": {
+   "accion": "vincular",
+   "con": 5318
+  },
+  "renovar-yo-ampliar-la-licencia-nacional-de-conducir": {
+   "accion": "vincular",
+   "con": "N-037"
+  },
+  "reparacion-economica-para-ninos-yo-adolescentes-en-el-marco-de-la-ley-27452": {
+   "accion": "vincular",
+   "con": 2690
+  },
+  "solicitar-autorizacion-para-actividades-contenidas-y-confinadas-con-ogm-vegetales-regulados": {
+   "accion": "vincular",
+   "con": 4991
+  },
+  "solicitar-autorizacion-y-atencion-de-eventos-de-concentracion-ganadera-incluidas-las": {
+   "accion": "vincular",
+   "con": 2487
+  },
+  "solicitar-certificacion-de-analisis-de-peligros-y-puntos-de-control-critico-appcc-en": {
+   "accion": "vincular",
+   "con": 5928
+  },
+  "solicitar-certificacion-de-buenas-practicas-de-manufactura-bpm-en-establecimientos": {
+   "accion": "vincular",
+   "con": 5932
+  },
+  "solicitar-certificado-de-antecedentes-penales-con-clave-de-la-seguridad-social-anses": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-con-clave-fiscal": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-con-documento-extranjero": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-con-tarjeta-banelco": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-con-usuario-de-mi-argentina": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-para-un-menor-de-edad": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-antecedentes-penales-personalmente": {
+   "accion": "vincular",
+   "con": "N-009"
+  },
+  "solicitar-certificado-de-autorizacion-para-el-desempeno-de-tareas-civiles-art-9deg-inc-4": {
+   "accion": "vincular",
+   "con": 4822
+  },
+  "solicitar-certificado-de-haberes-de-retiro-o-pension-militar": {
+   "accion": "vincular",
+   "con": 4820
+  },
+  "solicitar-certificado-de-suspension-del-haber-de-retiro-militar-segun-decreto-89401": {
+   "accion": "vincular",
+   "con": 4826
+  },
+  "solicitar-constancia-de-cuil": {
+   "accion": "vincular",
+   "con": "N-020"
+  },
+  "solicitar-el-reconocimiento-como-laboratorio-publico-o-privado-no-acreditado-en-los-rtm": {
+   "accion": "vincular",
+   "con": 5977
+  },
+  "solicitar-escrituracion-y-regulacion-dominial-de-inmueble": {
+   "accion": "vincular",
+   "con": 630
+  },
+  "solicitar-la-modificacion-de-datos-personales-de-militares-retirados-o-sus-pensionistas": {
+   "accion": "vincular",
+   "con": 4827
+  },
+  "solicitar-la-rehabilitacion-de-la-matricula-suspendida-por-cargo-del-productor-asesor-de": {
+   "accion": "vincular",
+   "con": 4874
+  },
+  "solicitar-la-rehabilitacion-de-la-matricula-suspendida-temporalmente-pedido-del-productor": {
+   "accion": "vincular",
+   "con": 4874
+  },
+  "solicitar-modificaciones-en-el-registro-de-alimentos-para-animales": {
+   "accion": "vincular",
+   "con": 2028
+  },
+  "solicitar-tarifa-social": {
+   "accion": "vincular",
+   "con": 516
+  },
+  "solicitar-un-visado-de-planos": {
+   "accion": "vincular",
+   "con": 609
+  },
+  "solicitar-una-autorizacion-comercial-de-organismos-geneticamente-modificados-ogm": {
+   "accion": "vincular",
+   "con": 4731
+  },
+  "solicitar-una-propuesta-de-uso-de-inmueble-propiciador": {
+   "accion": "vincular",
+   "con": 2403
+  },
+  "solicitar-una-servidumbre": {
+   "accion": "vincular",
+   "con": 2021
+  },
+  "solicitud-de-actualizacion-de-monografia-del-producto-en-investigacion": {
+   "accion": "vincular",
+   "con": 4955
+  },
+  "solicitud-de-autorizacion-de-estudios-de-farmacologia-clinica": {
+   "accion": "nuevo"
+  },
+  "tramitacion-de-ingreso-electronica-becarios": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitacion-de-ingreso-electronica-deportista-amateur": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitacion-de-ingreso-electronica-ferias-y-estudio-de-mercado": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitacion-de-ingreso-electronica-negocios": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitacion-de-ingreso-electronica-nomadas-digitales": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitacion-de-ingreso-electronica-pasantes": {
+   "accion": "vincular",
+   "con": "N-015"
+  },
+  "tramitar-documento-de-viaje-para-apatridas-y-refugiados": {
+   "accion": "vincular",
+   "con": "N-006"
+  },
+  "tramitar-el-pasaporte": {
+   "accion": "vincular",
+   "con": "N-005"
+  },
+  "tramitar-la-primera-identificacion-para-extranjeros": {
+   "accion": "vincular",
+   "con": "N-004"
+  },
+  "tramitar-viajes-ocasionales-en-circuito-cerrado-al-exterior": {
+   "accion": "vincular",
+   "con": 6027
+  },
+  "traslado-de-una-drogueria": {
+   "accion": "vincular",
+   "con": 2844
+  }
+ }
+}

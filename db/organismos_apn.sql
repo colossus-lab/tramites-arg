@@ -109,4 +109,73 @@ BEGIN
 END
 $$;
 
+-- Organismos que aparecen en las migas de las fichas de argentina.gob.ar y no en
+-- TAD. El nombre es el de la miga, así ingesta.fichas los encuentra por alias en
+-- vez de crearlos con la marca de revisión. El padre se busca por nombre.
+DO $$
+DECLARE
+    o record;
+    v_id integer;
+    v_padre integer;
+    v_nacion integer := (SELECT id FROM jurisdiccion WHERE nivel = 'nacional');
+BEGIN
+    FOR o IN
+        SELECT * FROM (VALUES
+            ('Presidencia de la Nación', NULL, 'otro', NULL),
+            ('Biblioteca Nacional de Maestros', 'BNM', 'organismo_desconcentrado', 'Ministerio de Capital Humano'),
+            ('Biblioteca Nacional', 'BN', 'ente_descentralizado', 'Ministerio de Capital Humano'),
+            ('Secretaría de Coordinación de Producción', NULL, 'secretaria', 'Ministerio de Economía'),
+            ('Registro de la Propiedad Inmueble', 'RPI', 'registro', 'Ministerio de Justicia'),
+            ('Instituto Nacional de la Música', 'INAMU', 'ente_descentralizado', 'Secretaría de Cultura'),
+            ('Museo Nacional de Bellas Artes', 'MNBA', 'organismo_desconcentrado', 'Presidencia de la Nación'),
+            ('Subsecretaría de Derechos Humanos', NULL, 'secretaria', 'Ministerio de Justicia'),
+            ('Archivo General de la Nación', 'AGN', 'organismo_desconcentrado', 'Jefatura de Gabinete de Ministros'),
+            ('Servicio Penitenciario Federal', 'SPF', 'otro', 'Ministerio de Seguridad Nacional'),
+            ('Servicio de Conciliación Laboral Obligatoria', 'SECLO', 'otro', 'Ministerio de Capital Humano'),
+            ('Comisión Nacional de Comercio Exterior', 'CNCE', 'organismo_desconcentrado', 'Ministerio de Economía'),
+            ('Subsecretaría de Deportes', NULL, 'secretaria', 'Jefatura de Gabinete de Ministros'),
+            ('Dirección Nacional de Asistencia Directa y Compensatoria', 'DINADIC', 'otro', 'Ministerio de Salud'),
+            ('Dirección Nacional Electoral', 'DINE', 'otro', 'Jefatura de Gabinete de Ministros'),
+            ('Oficina Nacional de Tecnologías de la Información', 'ONTI', 'otro', 'Jefatura de Gabinete de Ministros'),
+            ('Autoridad Certificante de la Oficina Nacional de Tecnologías de la Información (AC ONTI)', NULL, 'otro',
+                'Oficina Nacional de Tecnologías de la Información'),
+            ('Fondo Nacional de las Artes', 'FNA', 'ente_autarquico', 'Presidencia de la Nación'),
+            ('Comisión Nacional de Bibliotecas Populares', 'CONABIP', 'organismo_desconcentrado', 'Presidencia de la Nación'),
+            ('Museo Sitio de Memoria ESMA', NULL, 'otro', 'Subsecretaría de Derechos Humanos'),
+            ('Hospital Nacional Ramón Carrillo', NULL, 'otro', 'Ministerio de Salud'),
+            ('Tribunal de Tasaciones de la Nación', 'TTN', 'organismo_desconcentrado', 'Ministerio de Economía'),
+            ('Registro de Entidades', NULL, 'registro', 'Ministerio de Desregulación y Transformación del Estado'),
+            ('Agencia Nacional de Puertos y Navegación', 'ANPYN', 'ente_autarquico', 'Ministerio de Economía'),
+            ('Oficina Nacional de Contrataciones', 'ONC', 'otro', 'Jefatura de Gabinete de Ministros'),
+            ('Ente Regulador de Agua y Saneamiento', 'ERAS', 'ente_autarquico', 'Ministerio de Economía')
+        ) AS t (nombre, sigla, tipo, padre)
+    LOOP
+        SELECT organismo_id INTO v_padre FROM organismo_alias WHERE alias_normalizado = normalizar_texto(o.padre);
+        SELECT organismo_id INTO v_id FROM organismo_alias
+        WHERE alias_normalizado IN (normalizar_texto(o.nombre), normalizar_texto(o.sigla))
+        ORDER BY alias_normalizado = normalizar_texto(o.nombre) DESC LIMIT 1;
+        IF v_id IS NULL THEN
+            INSERT INTO organismo (jurisdiccion_id, nombre_oficial, sigla, tipo, padre_id)
+            VALUES (v_nacion, o.nombre, o.sigla, o.tipo, v_padre)
+            RETURNING id INTO v_id;
+        ELSE
+            UPDATE organismo SET sigla = o.sigla, tipo = o.tipo, revisar = false, padre_id = v_padre WHERE id = v_id;
+        END IF;
+        INSERT INTO organismo_alias (alias_normalizado, alias_original, organismo_id, origen)
+        SELECT normalizar_texto(a), a, v_id, 'seed' FROM unnest(ARRAY[o.nombre, o.sigla]) AS a WHERE a IS NOT NULL
+        ON CONFLICT (alias_normalizado) DO NOTHING;
+    END LOOP;
+
+    -- Variantes de nombre de organismos que ya existen.
+    INSERT INTO organismo_alias (alias_normalizado, alias_original, organismo_id, origen)
+    SELECT normalizar_texto(t.alias), t.alias, a.organismo_id, 'seed'
+    FROM (VALUES
+        ('Comisión Nacional de Regulación del Transporte', 'CNRT'),
+        ('Superintendencia de Riesgos del Trabajo', 'SRT')
+    ) AS t (alias, sigla)
+    JOIN organismo_alias a ON a.alias_normalizado = normalizar_texto(t.sigla)
+    ON CONFLICT (alias_normalizado) DO NOTHING;
+END
+$$;
+
 COMMIT;
