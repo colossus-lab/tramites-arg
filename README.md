@@ -4,6 +4,8 @@ Base abierta y análisis de los **trámites del Estado Nacional argentino**: qu�
 existen, qué organismo los atiende, cómo se hacen (online, presencial, con qué clave), qué
 requisitos piden y cuánto cuestan. Un proyecto de [Colossus Lab](https://colossuslab.org).
 
+**Web:** [tramites-arg.vercel.app](https://tramites-arg.vercel.app) · **Datos:** [descargas](https://tramites-arg.vercel.app/datos) (CC BY 4.0)
+
 > **Proyecto independiente y no oficial.** No está afiliado al Gobierno de la República
 > Argentina ni a ninguno de sus organismos. Los datos se construyen automáticamente a partir de
 > fuentes públicas y pueden contener errores o estar desactualizados: ante cualquier duda,
@@ -190,7 +192,7 @@ npm run build      # genera todas las páginas estáticas
 Next.js 16, estática: lee `web/data/` (generado por `scripts/exportar_web.py`) en el build y no
 necesita base de datos ni variables de entorno. El diseño editorial está portado de
 [OpenArg](https://github.com/colossus-lab/openarg_frontend) (MIT, ColossusLab). Se publica en Vercel
-con `web/` como directorio raíz.
+(proyecto `tramites-arg`, directorio raíz `web/`): cada push a `main` despliega solo.
 
 ## Backup
 
