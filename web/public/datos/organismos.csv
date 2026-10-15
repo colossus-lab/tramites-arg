@@ -1,0 +1,108 @@
+slug,sigla,nombre,tipo,depende_de,sucesor,tramites
+msal,MSAL,Ministerio de Salud,ministerio,,,177
+msn,MSN,Ministerio de Seguridad Nacional,ministerio,,,96
+afip,AFIP,Administración Federal de Ingresos Públicos,ente_autarquico,,arca,0
+arca,ARCA,Agencia de Recaudación y Control Aduanero,ente_autarquico,,,49
+anmac,ANMAC,Agencia Nacional de Materiales Controlados,ente_descentralizado,,renar,0
+renar,RENAR,Registro Nacional de Armas,organismo_desconcentrado,msn,,176
+andis,ANDIS,Agencia Nacional de Discapacidad,ente_descentralizado,,snd,0
+snd,SND,Secretaría Nacional de Discapacidad,secretaria,msal,,12
+slyt,SLYT,Secretaría Legal y Técnica,secretaria,,,13
+jgm,JGM,Jefatura de Gabinete de Ministros,ministerio,,,219
+mj,MJ,Ministerio de Justicia,ministerio,,,94
+mi,MI,Ministerio del Interior,ministerio,,,10
+mecon,MECON,Ministerio de Economía,ministerio,,,691
+mch,MCH,Ministerio de Capital Humano,ministerio,,,149
+mdyte,MDYTE,Ministerio de Desregulación y Transformación del Estado,ministerio,,,7
+secretaria-de-comunicacion-y-medios,,Secretaría de Comunicación y Medios,secretaria,,,2
+sgp,SGP,Secretaría General,secretaria,,,5
+secretaria-de-cultura,,Secretaría de Cultura,secretaria,,,14
+sigen,SIGEN,Sindicatura General de la Nación,ente_autarquico,,,4
+md,MD,Ministerio de Defensa,ministerio,,,9
+mrecic,MRECIC,"Ministerio de Relaciones Exteriores, Comercio Internacional y Culto",ministerio,,,39
+apn,APN,Administración de Parques Nacionales,ente_descentralizado,jgm,,13
+agencia-i-d-i,Agencia I+D+i,"Agencia Nacional de Promoción de la Investigación, el Desarrollo Tecnológico y la Innovación",ente_descentralizado,jgm,,43
+sae,SAE,Secretaría de Asuntos Estratégicos,secretaria,jgm,,2
+iafprpm,IAFPRPM,Instituto de Ayuda Financiera para Pago de Retiros y Pensiones Militares,ente_descentralizado,md,,48
+crjppf,CRJPPF,"Caja de Retiros, Jubilaciones y Pensiones de la Policía Federal",ente_descentralizado,msn,,12
+afe,AFE,Agencia Federal de Emergencias,,msn,,7
+enrege,ENREGE,Ente Nacional Regulador del Gas y la Electricidad,ente_autarquico,mecon,,39
+jst,JST,Junta de Seguridad en el Transporte,ente_descentralizado,mecon,,1
+incucai,INCUCAI,Instituto Nacional Central Único Coordinador de Ablación e Implante,ente_descentralizado,msal,,4
+cncps,CNCPS,Consejo Nacional de Coordinación de Políticas Sociales,,mch,,1
+igj,IGJ,Inspección General de Justicia,,mj,,143
+aabe,AABE,Agencia de Administración de Bienes del Estado,,jgm,,21
+inaes,INAES,Instituto Nacional de Asociativismo y Economía Social,,mch,,52
+coneau,CONEAU,Comisión Nacional de Evaluación y Acreditación Universitaria,,mch,,12
+ssn,SSN,Superintendencia de Seguros de la Nación,,mecon,,103
+aaip,AAIP,Agencia de Acceso a la Información Pública,,jgm,,16
+senasa,SENASA,Servicio Nacional de Sanidad y Calidad Agroalimentaria,,mecon,,250
+adifse,ADIFSE,Administración de Infraestructuras Ferroviarias Sociedad del Estado,,mecon,,14
+enacom,ENACOM,Ente Nacional de Comunicaciones,,jgm,,106
+inv,INV,Instituto Nacional de Vitivinicultura,,mecon,,53
+anmat,ANMAT,"Administración Nacional de Medicamentos, Alimentos y Tecnología Médica",,msal,,173
+inase,INASE,Instituto Nacional de Semillas,,mecon,,27
+conicet,CONICET,Consejo Nacional de Investigaciones Científicas y Técnicas,,jgm,,8
+inti,INTI,Instituto Nacional de Tecnología Industrial,,mecon,,19
+anac,ANAC,Administración Nacional de Aviación Civil,,mecon,,42
+incaa,INCAA,Instituto Nacional de Cine y Artes Audiovisuales,,secretaria-de-cultura,,4
+acumar,ACUMAR,Autoridad de Cuenca Matanza Riachuelo,,mecon,,3
+srt,SRT,Superintendencia de Riesgos de Trabajo,,mch,,16
+cnrt,CNRT,Comisión Nacional de Regulación de Transporte,,mecon,,58
+dnv,DNV,Dirección Nacional de Vialidad,,mecon,,6
+agp,AGP,Administración General de Puertos,,mecon,,2
+sofse,SOFSE,Operadora Ferroviaria Sociedad del Estado,,mecon,,3
+ign,IGN,Instituto Geográfico Nacional,,md,,2
+renaper,RENAPER,Registro Nacional de las Personas,,jgm,,41
+pna,PNA,Prefectura Naval Argentina,,msn,,143
+dnm,DNM,Dirección Nacional de Migraciones,,msn,,8
+oa,OA,Oficina Anticorrupción,,mj,,10
+pfa,PFA,Policía Federal Argentina,,msn,,4
+sss,SSS,Superintendencia de Servicios de Salud,,msal,,55
+anses,ANSES,Administración Nacional de la Seguridad Social,,mch,,67
+cnv,CNV,Comisión Nacional de Valores,,mecon,,51
+sennaf,SENNAF,"Secretaría Nacional de Niñez, Adolescencia y Familia",,mch,,1
+cndc,CNDC,Comisión Nacional de Defensa de la Competencia,,mecon,,3
+inssjp,INSSJP,Instituto Nacional de Servicios Sociales para Jubilados y Pensionados,,msal,,5
+gna,GNA,Gendarmería Nacional Argentina,,msn,,5
+enargas,ENARGAS,Ente Nacional Regulador del Gas,,mecon,,18
+ansv,ANSV,Agencia Nacional de Seguridad Vial,,mecon,,19
+hp,HP,Hospital Posadas,,msal,,1
+conae,CONAE,Comisión Nacional de Actividades Espaciales,,jgm,,4
+ciot,CIOT,Comisión de Igualdad de Oportunidades y Trato,,mdyte,,1
+tfn,TFN,Tribunal Fiscal de la Nación,,mecon,,2
+ara,ARA,Armada Argentina,,md,,2
+inta,INTA,Instituto Nacional de Tecnología Agropecuaria,,mecon,,2
+orsna,ORSNA,Organismo Regulador del Sistema Nacional de Aeropuertos,,mecon,,1
+cnea,CNEA,Comisión Nacional de Energía Atómica,,mecon,,42
+iosfa,IOSFA,Instituto de Obra Social de las Fuerzas Armadas,,md,,2
+arn,ARN,Autoridad Regulatoria Nuclear,,sgp,,33
+rnr,RNR,Registro Nacional de Reincidencia,registro,mj,,1
+dnrpa,DNRPA,Dirección Nacional de los Registros Nacionales de la Propiedad del Automotor y de Créditos Prendarios,registro,mj,,5
+dnda,DNDA,Dirección Nacional del Derecho de Autor,registro,mj,,36
+inpi,INPI,Instituto Nacional de la Propiedad Industrial,ente_autarquico,mecon,,28
+siyc,SIYC,Secretaría de Industria y Comercio,secretaria,mecon,,1
+steyss,STEYSS,"Secretaría de Trabajo, Empleo y Seguridad Social",secretaria,mch,,1
+nic-argentina,NIC Argentina,NIC Argentina (Dirección Nacional del Registro de Dominios de Internet),registro,slyt,,5
+secretaria-de-coordinacion-de-produccion,,Secretaría de Coordinación de Producción,secretaria,mecon,,17
+bnm,BNM,Biblioteca Nacional de Maestros,organismo_desconcentrado,mch,,20
+inamu,INAMU,Instituto Nacional de la Música,ente_descentralizado,secretaria-de-cultura,,6
+bn,BN,Biblioteca Nacional,ente_descentralizado,mch,,8
+rpi,RPI,Registro de la Propiedad Inmueble,registro,mj,,12
+presidencia-de-la-nacion,,Presidencia de la Nación,otro,,,12
+agn,AGN,Archivo General de la Nación,organismo_desconcentrado,jgm,,2
+mnba,MNBA,Museo Nacional de Bellas Artes,organismo_desconcentrado,presidencia-de-la-nacion,,3
+subsecretaria-de-derechos-humanos,,Subsecretaría de Derechos Humanos,secretaria,mj,,4
+spf,SPF,Servicio Penitenciario Federal,otro,msn,,3
+registro-de-entidades,,Registro de Entidades,registro,mdyte,,1
+seclo,SECLO,Servicio de Conciliación Laboral Obligatoria,otro,mch,,2
+cnce,CNCE,Comisión Nacional de Comercio Exterior,organismo_desconcentrado,mecon,,2
+subsecretaria-de-deportes,,Subsecretaría de Deportes,secretaria,jgm,,2
+museo-sitio-de-memoria-esma,,Museo Sitio de Memoria ESMA,otro,subsecretaria-de-derechos-humanos,,1
+conabip,CONABIP,Comisión Nacional de Bibliotecas Populares,organismo_desconcentrado,presidencia-de-la-nacion,,1
+autoridad-certificante-de-la-oficina-nacional-de-tecnologias,,Autoridad Certificante de la Oficina Nacional de Tecnologías de la Información (AC ONTI),otro,onti,,1
+onti,ONTI,Oficina Nacional de Tecnologías de la Información,otro,jgm,,0
+hospital-nacional-ramon-carrillo,,Hospital Nacional Ramón Carrillo,otro,msal,,1
+dinadic,DINADIC,Dirección Nacional de Asistencia Directa y Compensatoria,otro,msal,,2
+ttn,TTN,Tribunal de Tasaciones de la Nación,organismo_desconcentrado,mecon,,1
+fna,FNA,Fondo Nacional de las Artes,ente_autarquico,presidencia-de-la-nacion,,1

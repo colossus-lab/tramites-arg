@@ -1,0 +1,843 @@
+{
+ "totales": {
+  "tramites": 3768,
+  "organismos": 103,
+  "ministerios": 17,
+  "online_pct": 88.0,
+  "presencial_pct": 23.0,
+  "solo_presencial_pct": 9.2,
+  "canal_sin_dato_pct": 2.7,
+  "top10_organismos_pct": 59.1,
+  "arancelados_pct": 7.3,
+  "gratuitos_pct": 74.6,
+  "costo_sin_dato_pct": 18.1,
+  "con_requisitos_pct": 57.8,
+  "con_categoria_pct": 99.3,
+  "con_destinatario_pct": 85.6,
+  "para_ciudadanos_y_empresas": 3653,
+  "variantes": 38,
+  "bajas": 3,
+  "prueba": 4,
+  "consultas": 38,
+  "por_fuente": {
+   "tad": 2492,
+   "ficha": 1838,
+   "inventario": 55
+  }
+ },
+ "por_categoria": [
+  {
+   "codigo": "empresas",
+   "nombre": "Empresas y sociedades",
+   "tramites": 628
+  },
+  {
+   "codigo": "salud",
+   "nombre": "Salud",
+   "tramites": 356
+  },
+  {
+   "codigo": "agro",
+   "nombre": "Agro y alimentos",
+   "tramites": 306
+  },
+  {
+   "codigo": "transporte",
+   "nombre": "Transporte (aéreo, náutico, terrestre)",
+   "tramites": 303
+  },
+  {
+   "codigo": "comercio_exterior",
+   "nombre": "Comercio exterior",
+   "tramites": 274
+  },
+  {
+   "codigo": "finanzas",
+   "nombre": "Finanzas y seguros",
+   "tramites": 160
+  },
+  {
+   "codigo": "armas",
+   "nombre": "Armas y materiales controlados",
+   "tramites": 148
+  },
+  {
+   "codigo": "telecomunicaciones",
+   "nombre": "Telecomunicaciones e internet",
+   "tramites": 142
+  },
+  {
+   "codigo": "energia",
+   "nombre": "Energía",
+   "tramites": 126
+  },
+  {
+   "codigo": "seguridad_social",
+   "nombre": "Seguridad social y jubilaciones",
+   "tramites": 114
+  },
+  {
+   "codigo": "ciencia_tecnologia",
+   "nombre": "Ciencia y tecnología",
+   "tramites": 112
+  },
+  {
+   "codigo": "trabajo",
+   "nombre": "Trabajo y empleo",
+   "tramites": 96
+  },
+  {
+   "codigo": "gestion_publica",
+   "nombre": "Gestión pública y relación con el Estado",
+   "tramites": 86
+  },
+  {
+   "codigo": "cultura",
+   "nombre": "Cultura",
+   "tramites": 81
+  },
+  {
+   "codigo": "organizaciones",
+   "nombre": "Organizaciones civiles y economía social",
+   "tramites": 81
+  },
+  {
+   "codigo": "vehiculos",
+   "nombre": "Vehículos y licencias de conducir",
+   "tramites": 80
+  },
+  {
+   "codigo": "educacion",
+   "nombre": "Educación",
+   "tramites": 78
+  },
+  {
+   "codigo": "propiedad_intelectual",
+   "nombre": "Propiedad intelectual",
+   "tramites": 69
+  },
+  {
+   "codigo": "ambiente",
+   "nombre": "Ambiente",
+   "tramites": 65
+  },
+  {
+   "codigo": "justicia",
+   "nombre": "Justicia y antecedentes",
+   "tramites": 61
+  },
+  {
+   "codigo": "impuestos",
+   "nombre": "Impuestos y monotributo",
+   "tramites": 59
+  },
+  {
+   "codigo": "seguridad",
+   "nombre": "Seguridad",
+   "tramites": 59
+  },
+  {
+   "codigo": "identidad",
+   "nombre": "Identidad y documentación",
+   "tramites": 41
+  },
+  {
+   "codigo": "propiedad",
+   "nombre": "Propiedad e inmuebles",
+   "tramites": 40
+  },
+  {
+   "codigo": "transversal",
+   "nombre": "Transversal (turnos, credenciales, consultas)",
+   "tramites": 34
+  },
+  {
+   "codigo": "programas_sociales",
+   "nombre": "Asignaciones y programas sociales",
+   "tramites": 33
+  },
+  {
+   "codigo": "viajes",
+   "nombre": "Viajes y trámites consulares",
+   "tramites": 32
+  },
+  {
+   "codigo": "discapacidad",
+   "nombre": "Discapacidad",
+   "tramites": 27
+  },
+  {
+   "codigo": "sin_categoria",
+   "nombre": "Sin categoría",
+   "tramites": 25
+  },
+  {
+   "codigo": "turismo_deporte",
+   "nombre": "Turismo y deporte",
+   "tramites": 17
+  },
+  {
+   "codigo": "migraciones",
+   "nombre": "Migraciones y extranjería",
+   "tramites": 14
+  },
+  {
+   "codigo": "familia",
+   "nombre": "Familia y estado civil",
+   "tramites": 13
+  },
+  {
+   "codigo": "consumo",
+   "nombre": "Consumo",
+   "tramites": 8
+  }
+ ],
+ "por_ministerio": [
+  {
+   "slug": "mecon",
+   "sigla": "MECON",
+   "nombre": "Ministerio de Economía",
+   "tramites": 1498
+  },
+  {
+   "slug": "jgm",
+   "sigla": "JGM",
+   "nombre": "Jefatura de Gabinete de Ministros",
+   "tramites": 478
+  },
+  {
+   "slug": "msn",
+   "sigla": "MSN",
+   "nombre": "Ministerio de Seguridad Nacional",
+   "tramites": 454
+  },
+  {
+   "slug": "msal",
+   "sigla": "MSAL",
+   "nombre": "Ministerio de Salud",
+   "tramites": 430
+  },
+  {
+   "slug": "mch",
+   "sigla": "MCH",
+   "nombre": "Ministerio de Capital Humano",
+   "tramites": 329
+  },
+  {
+   "slug": "mj",
+   "sigla": "MJ",
+   "nombre": "Ministerio de Justicia",
+   "tramites": 306
+  },
+  {
+   "slug": "md",
+   "sigla": "MD",
+   "nombre": "Ministerio de Defensa",
+   "tramites": 63
+  },
+  {
+   "slug": "arca",
+   "sigla": "ARCA",
+   "nombre": "Agencia de Recaudación y Control Aduanero",
+   "tramites": 49
+  },
+  {
+   "slug": "mrecic",
+   "sigla": "MRECIC",
+   "nombre": "Ministerio de Relaciones Exteriores, Comercio Internacional y Culto",
+   "tramites": 39
+  },
+  {
+   "slug": "sgp",
+   "sigla": "SGP",
+   "nombre": "Secretaría General",
+   "tramites": 38
+  },
+  {
+   "slug": "secretaria-de-cultura",
+   "sigla": null,
+   "nombre": "Secretaría de Cultura",
+   "tramites": 24
+  },
+  {
+   "slug": "slyt",
+   "sigla": "SLYT",
+   "nombre": "Secretaría Legal y Técnica",
+   "tramites": 18
+  },
+  {
+   "slug": "presidencia-de-la-nacion",
+   "sigla": null,
+   "nombre": "Presidencia de la Nación",
+   "tramites": 17
+  },
+  {
+   "slug": "mi",
+   "sigla": "MI",
+   "nombre": "Ministerio del Interior",
+   "tramites": 10
+  },
+  {
+   "slug": "mdyte",
+   "sigla": "MDYTE",
+   "nombre": "Ministerio de Desregulación y Transformación del Estado",
+   "tramites": 9
+  },
+  {
+   "slug": "sigen",
+   "sigla": "SIGEN",
+   "nombre": "Sindicatura General de la Nación",
+   "tramites": 4
+  },
+  {
+   "slug": "secretaria-de-comunicacion-y-medios",
+   "sigla": null,
+   "nombre": "Secretaría de Comunicación y Medios",
+   "tramites": 2
+  }
+ ],
+ "por_organismo": [
+  {
+   "slug": "mecon",
+   "sigla": "MECON",
+   "nombre": "Ministerio de Economía",
+   "tramites": 691
+  },
+  {
+   "slug": "senasa",
+   "sigla": "SENASA",
+   "nombre": "Servicio Nacional de Sanidad y Calidad Agroalimentaria",
+   "tramites": 250
+  },
+  {
+   "slug": "jgm",
+   "sigla": "JGM",
+   "nombre": "Jefatura de Gabinete de Ministros",
+   "tramites": 219
+  },
+  {
+   "slug": "msal",
+   "sigla": "MSAL",
+   "nombre": "Ministerio de Salud",
+   "tramites": 177
+  },
+  {
+   "slug": "renar",
+   "sigla": "RENAR",
+   "nombre": "Registro Nacional de Armas",
+   "tramites": 176
+  },
+  {
+   "slug": "anmat",
+   "sigla": "ANMAT",
+   "nombre": "Administración Nacional de Medicamentos, Alimentos y Tecnología Médica",
+   "tramites": 173
+  },
+  {
+   "slug": "mch",
+   "sigla": "MCH",
+   "nombre": "Ministerio de Capital Humano",
+   "tramites": 149
+  },
+  {
+   "slug": "pna",
+   "sigla": "PNA",
+   "nombre": "Prefectura Naval Argentina",
+   "tramites": 143
+  },
+  {
+   "slug": "igj",
+   "sigla": "IGJ",
+   "nombre": "Inspección General de Justicia",
+   "tramites": 143
+  },
+  {
+   "slug": "enacom",
+   "sigla": "ENACOM",
+   "nombre": "Ente Nacional de Comunicaciones",
+   "tramites": 106
+  },
+  {
+   "slug": "ssn",
+   "sigla": "SSN",
+   "nombre": "Superintendencia de Seguros de la Nación",
+   "tramites": 103
+  },
+  {
+   "slug": "msn",
+   "sigla": "MSN",
+   "nombre": "Ministerio de Seguridad Nacional",
+   "tramites": 96
+  },
+  {
+   "slug": "mj",
+   "sigla": "MJ",
+   "nombre": "Ministerio de Justicia",
+   "tramites": 94
+  },
+  {
+   "slug": "anses",
+   "sigla": "ANSES",
+   "nombre": "Administración Nacional de la Seguridad Social",
+   "tramites": 67
+  },
+  {
+   "slug": "cnrt",
+   "sigla": "CNRT",
+   "nombre": "Comisión Nacional de Regulación de Transporte",
+   "tramites": 58
+  },
+  {
+   "slug": "sss",
+   "sigla": "SSS",
+   "nombre": "Superintendencia de Servicios de Salud",
+   "tramites": 55
+  },
+  {
+   "slug": "inv",
+   "sigla": "INV",
+   "nombre": "Instituto Nacional de Vitivinicultura",
+   "tramites": 53
+  },
+  {
+   "slug": "inaes",
+   "sigla": "INAES",
+   "nombre": "Instituto Nacional de Asociativismo y Economía Social",
+   "tramites": 52
+  },
+  {
+   "slug": "cnv",
+   "sigla": "CNV",
+   "nombre": "Comisión Nacional de Valores",
+   "tramites": 51
+  },
+  {
+   "slug": "arca",
+   "sigla": "ARCA",
+   "nombre": "Agencia de Recaudación y Control Aduanero",
+   "tramites": 49
+  },
+  {
+   "slug": "iafprpm",
+   "sigla": "IAFPRPM",
+   "nombre": "Instituto de Ayuda Financiera para Pago de Retiros y Pensiones Militares",
+   "tramites": 48
+  },
+  {
+   "slug": "agencia-i-d-i",
+   "sigla": "Agencia I+D+i",
+   "nombre": "Agencia Nacional de Promoción de la Investigación, el Desarrollo Tecnológico y la Innovación",
+   "tramites": 43
+  },
+  {
+   "slug": "anac",
+   "sigla": "ANAC",
+   "nombre": "Administración Nacional de Aviación Civil",
+   "tramites": 42
+  },
+  {
+   "slug": "cnea",
+   "sigla": "CNEA",
+   "nombre": "Comisión Nacional de Energía Atómica",
+   "tramites": 42
+  },
+  {
+   "slug": "renaper",
+   "sigla": "RENAPER",
+   "nombre": "Registro Nacional de las Personas",
+   "tramites": 41
+  },
+  {
+   "slug": "mrecic",
+   "sigla": "MRECIC",
+   "nombre": "Ministerio de Relaciones Exteriores, Comercio Internacional y Culto",
+   "tramites": 39
+  },
+  {
+   "slug": "enrege",
+   "sigla": "ENREGE",
+   "nombre": "Ente Nacional Regulador del Gas y la Electricidad",
+   "tramites": 39
+  },
+  {
+   "slug": "dnda",
+   "sigla": "DNDA",
+   "nombre": "Dirección Nacional del Derecho de Autor",
+   "tramites": 36
+  },
+  {
+   "slug": "arn",
+   "sigla": "ARN",
+   "nombre": "Autoridad Regulatoria Nuclear",
+   "tramites": 33
+  },
+  {
+   "slug": "inpi",
+   "sigla": "INPI",
+   "nombre": "Instituto Nacional de la Propiedad Industrial",
+   "tramites": 28
+  },
+  {
+   "slug": "inase",
+   "sigla": "INASE",
+   "nombre": "Instituto Nacional de Semillas",
+   "tramites": 27
+  },
+  {
+   "slug": "aabe",
+   "sigla": "AABE",
+   "nombre": "Agencia de Administración de Bienes del Estado",
+   "tramites": 21
+  },
+  {
+   "slug": "bnm",
+   "sigla": "BNM",
+   "nombre": "Biblioteca Nacional de Maestros",
+   "tramites": 20
+  },
+  {
+   "slug": "ansv",
+   "sigla": "ANSV",
+   "nombre": "Agencia Nacional de Seguridad Vial",
+   "tramites": 19
+  },
+  {
+   "slug": "inti",
+   "sigla": "INTI",
+   "nombre": "Instituto Nacional de Tecnología Industrial",
+   "tramites": 19
+  },
+  {
+   "slug": "enargas",
+   "sigla": "ENARGAS",
+   "nombre": "Ente Nacional Regulador del Gas",
+   "tramites": 18
+  },
+  {
+   "slug": "secretaria-de-coordinacion-de-produccion",
+   "sigla": null,
+   "nombre": "Secretaría de Coordinación de Producción",
+   "tramites": 17
+  },
+  {
+   "slug": "aaip",
+   "sigla": "AAIP",
+   "nombre": "Agencia de Acceso a la Información Pública",
+   "tramites": 16
+  },
+  {
+   "slug": "srt",
+   "sigla": "SRT",
+   "nombre": "Superintendencia de Riesgos de Trabajo",
+   "tramites": 16
+  },
+  {
+   "slug": "secretaria-de-cultura",
+   "sigla": null,
+   "nombre": "Secretaría de Cultura",
+   "tramites": 14
+  }
+ ],
+ "por_plataforma": [
+  {
+   "plataforma": "Trámites a Distancia (TAD)",
+   "tramites": 2628
+  },
+  {
+   "plataforma": "Ventanilla Única de Comercio Exterior (VUCE)",
+   "tramites": 484
+  },
+  {
+   "plataforma": "Mi Argentina",
+   "tramites": 123
+  },
+  {
+   "plataforma": "ARCA con clave fiscal",
+   "tramites": 73
+  },
+  {
+   "plataforma": "Mi ANSES",
+   "tramites": 64
+  },
+  {
+   "plataforma": "RaDEx (Migraciones)",
+   "tramites": 44
+  },
+  {
+   "plataforma": "SITE / DNRPA",
+   "tramites": 3
+  },
+  {
+   "plataforma": "Mi RENAR (ex MiAnmac)",
+   "tramites": 2
+  }
+ ],
+ "por_modalidad": [
+  {
+   "modalidad": "Solo en línea",
+   "tramites": 2798
+  },
+  {
+   "modalidad": "En línea o presencial",
+   "tramites": 517
+  },
+  {
+   "modalidad": "Solo presencial",
+   "tramites": 348
+  },
+  {
+   "modalidad": "Por correo",
+   "tramites": 3
+  },
+  {
+   "modalidad": "Sin dato",
+   "tramites": 102
+  }
+ ],
+ "autenticacion": [
+  {
+   "metodo": "clave_fiscal",
+   "tramites": 2501
+  },
+  {
+   "metodo": "mi_argentina",
+   "tramites": 2217
+  },
+  {
+   "metodo": "css_anses",
+   "tramites": 153
+  },
+  {
+   "metodo": "dni_tramite",
+   "tramites": 145
+  },
+  {
+   "metodo": "mi_argentina_validado",
+   "tramites": 10
+  },
+  {
+   "metodo": "nic_no_residente",
+   "tramites": 10
+  },
+  {
+   "metodo": "sin_autenticacion",
+   "tramites": 1
+  },
+  {
+   "metodo": "otro",
+   "tramites": 1
+  }
+ ],
+ "por_destinatario": [
+  {
+   "tipo": "empresa",
+   "tramites": 1963
+  },
+  {
+   "tipo": "pf_ciudadano",
+   "tramites": 1146
+  },
+  {
+   "tipo": "profesional",
+   "tramites": 200
+  },
+  {
+   "tipo": "organizacion_civil",
+   "tramites": 118
+  },
+  {
+   "tipo": "organismo_publico",
+   "tramites": 115
+  },
+  {
+   "tipo": "cooperativa_mutual",
+   "tramites": 83
+  },
+  {
+   "tipo": "pf_extranjero_residente",
+   "tramites": 60
+  },
+  {
+   "tipo": "emprendedor",
+   "tramites": 52
+  },
+  {
+   "tipo": "pf_no_residente",
+   "tramites": 16
+  }
+ ],
+ "por_anio_publicacion_tad": [
+  {
+   "anio": "2016",
+   "tramites": 68
+  },
+  {
+   "anio": "2017",
+   "tramites": 377
+  },
+  {
+   "anio": "2018",
+   "tramites": 546
+  },
+  {
+   "anio": "2019",
+   "tramites": 658
+  },
+  {
+   "anio": "2020",
+   "tramites": 178
+  },
+  {
+   "anio": "2021",
+   "tramites": 130
+  },
+  {
+   "anio": "2022",
+   "tramites": 160
+  },
+  {
+   "anio": "2023",
+   "tramites": 98
+  },
+  {
+   "anio": "2024",
+   "tramites": 99
+  },
+  {
+   "anio": "2025",
+   "tramites": 121
+  },
+  {
+   "anio": "2026",
+   "tramites": 57
+  }
+ ],
+ "costos": {
+  "gratuitos": 2812,
+  "arancelados": 275,
+  "sin_dato": 681,
+  "subestimados_csv_tad": 88,
+  "distribucion": [
+   {
+    "tramo": "Hasta $10.000",
+    "tramites": 102
+   },
+   {
+    "tramo": "$10.000 – $50.000",
+    "tramites": 63
+   },
+   {
+    "tramo": "$50.000 – $200.000",
+    "tramites": 33
+   },
+   {
+    "tramo": "$200.000 – $1 millón",
+    "tramites": 37
+   },
+   {
+    "tramo": "Más de $1 millón",
+    "tramites": 10
+   }
+  ],
+  "mediana": 17672,
+  "discrepancias": [
+   {
+    "slug": "reforma-de-estructura-edilicia-en-una-drogueria-tad-2848",
+    "nombre": "Reforma de Estructura Edilicia en una Droguería",
+    "csv": 45000,
+    "otra_fuente": 135000,
+    "fuente": "tad"
+   }
+  ]
+ },
+ "requisitos_top": [
+  {
+   "documento": "Nota o formulario de solicitud",
+   "tramites": 1002
+  },
+  {
+   "documento": "DNI",
+   "tramites": 541
+  },
+  {
+   "documento": "Poder o acreditación de representación",
+   "tramites": 446
+  },
+  {
+   "documento": "Título o certificado profesional",
+   "tramites": 414
+  },
+  {
+   "documento": "Constancia de domicilio",
+   "tramites": 361
+  },
+  {
+   "documento": "CUIT / CUIL",
+   "tramites": 349
+  },
+  {
+   "documento": "Declaración jurada",
+   "tramites": 309
+  },
+  {
+   "documento": "Estatuto o contrato social",
+   "tramites": 260
+  },
+  {
+   "documento": "Comprobante de pago",
+   "tramites": 238
+  },
+  {
+   "documento": "Certificado de antecedentes",
+   "tramites": 223
+  },
+  {
+   "documento": "Clave fiscal",
+   "tramites": 219
+  },
+  {
+   "documento": "Planos",
+   "tramites": 152
+  },
+  {
+   "documento": "Estados contables o balance",
+   "tramites": 87
+  },
+  {
+   "documento": "Habilitación municipal o provincial",
+   "tramites": 81
+  }
+ ],
+ "cambios_institucionales": [
+  {
+   "anterior": "Administración Federal de Ingresos Públicos",
+   "anterior_sigla": "AFIP",
+   "sucesor": "Agencia de Recaudación y Control Aduanero",
+   "sucesor_sigla": "ARCA",
+   "sucesor_slug": "arca",
+   "fecha": "2024-10-25",
+   "norma": "Decreto 953/2024",
+   "tramites": 49
+  },
+  {
+   "anterior": "Agencia Nacional de Materiales Controlados",
+   "anterior_sigla": "ANMAC",
+   "sucesor": "Registro Nacional de Armas",
+   "sucesor_sigla": "RENAR",
+   "sucesor_slug": "renar",
+   "fecha": "2025-07-01",
+   "norma": "Decreto 445/2025",
+   "tramites": 176
+  },
+  {
+   "anterior": "Agencia Nacional de Discapacidad",
+   "anterior_sigla": "ANDIS",
+   "sucesor": "Secretaría Nacional de Discapacidad",
+   "sucesor_sigla": "SND",
+   "sucesor_slug": "snd",
+   "fecha": "2026-01-02",
+   "norma": "DNU 942/2025",
+   "tramites": 12
+  }
+ ]
+}

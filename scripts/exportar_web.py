@@ -43,8 +43,25 @@ CONFIANZA = {"manual": "manual", "comercio_exterior": "alta", "organismo": "alta
 TIPO_FUENTE_PUBLICO = {"csv_tad": "tad", "api_tad": "tad", "ficha_argentina_gob_ar": "ficha", "manual": "inventario"}
 
 
+# Algunas descripciones oficiales listan profesionales o empresas privadas con su mail y celular.
+# El repositorio es público: se publican solo los correos institucionales y nunca un celular.
+CORREO = re.compile(r"[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)")
+DOMINIO_INSTITUCIONAL = re.compile(r"(\.|^)(gob|gov|edu|mil)\.ar$|\.gob\.[a-z]{2}$|\.gov(\.[a-z]{2})?$|\.int$|\.org(\.ar)?$",
+                                   re.IGNORECASE)
+CELULAR = re.compile(r"\b(Cel(ular)?|M[oó]vil|WhatsApp)\.?\s*:?\s*[0-9()+][0-9()+ .-]{5,}[0-9]", re.IGNORECASE)
+
+
+def privacidad(texto):
+    """Oculta correos no institucionales y números de celular de un texto o HTML ya sanitizado."""
+    if not texto:
+        return texto
+    texto = CORREO.sub(lambda m: m.group(0) if DOMINIO_INSTITUCIONAL.search(m.group(1)) else "[correo omitido]", texto)
+    return CELULAR.sub("[teléfono omitido]", texto)
+
+
 def sanitizar(html, base="https://www.argentina.gob.ar"):
-    """HTML de una fuente -> HTML con etiquetas de la lista blanca y links absolutos y seguros."""
+    """HTML de una fuente -> HTML con etiquetas de la lista blanca, links absolutos y seguros y sin datos
+    personales de contacto (ver privacidad)."""
     if not html:
         return None
     sopa = BeautifulSoup(html, "html.parser")
@@ -69,7 +86,7 @@ def sanitizar(html, base="https://www.argentina.gob.ar"):
     for p in sopa.find_all(["p", "li"]):
         if not p.get_text(strip=True) and not p.find("br"):
             p.decompose()
-    texto = re.sub(r"\s+", " ", str(sopa)).strip()
+    texto = privacidad(re.sub(r"\s+", " ", str(sopa)).strip())
     return texto or None
 
 
@@ -161,7 +178,7 @@ def exportar(cur):
             FROM requisito r LEFT JOIN fuente f ON f.id = r.fuente_id
             ORDER BY r.fuente_id NULLS FIRST, r.orden"""):
         requisitos[fila["tramite_id"]].append({
-            "descripcion": fila["descripcion"], "tipo": fila["tipo"], "seccion": fila["seccion"],
+            "descripcion": privacidad(fila["descripcion"]), "tipo": fila["tipo"], "seccion": fila["seccion"],
             "obligatorio": fila["obligatorio"], "fuente": TIPO_FUENTE_PUBLICO.get(fila["fuente"], "manual"),
             "previo": slug_de.get(fila["tramite_previo_id"]),
         })
@@ -175,7 +192,7 @@ def exportar(cur):
         costos[fila["tramite_id"]].append({
             "concepto": fila["concepto"], "gratuito": fila["gratuito"], "monto_min": numero(fila["monto_min"]),
             "monto_max": numero(fila["monto_max"]), "unidad": fila["unidad"], "norma": fila["norma"],
-            "detalle": fila["detalle"], "variante": fila["variante"],
+            "detalle": privacidad(fila["detalle"]), "variante": fila["variante"],
             "vigente_desde": fila["vigente_desde"].isoformat() if fila["vigente_desde"] else None,
             "fuente": TIPO_FUENTE_PUBLICO.get(fila["fuente"], "manual"),
         })
@@ -230,7 +247,7 @@ def exportar(cur):
             continue
         tid = t["id"]
         registro = {
-            "slug": t["slug"], "nombre": t["nombre"], "descripcion": t["descripcion"], "estado": t["estado"],
+            "slug": t["slug"], "nombre": t["nombre"], "descripcion": privacidad(t["descripcion"]), "estado": t["estado"],
             # Por nombre: la repartición TESTSADE también inicia algún trámite real (p. ej. TAD 4598).
             "prueba": bool(PRUEBA.search(t["nombre"] or "")),
             "naturaleza": t["naturaleza"],  # 'consulta': servicio informativo, no cuenta como trámite

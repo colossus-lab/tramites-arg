@@ -29,6 +29,19 @@ class SanitizarTest(unittest.TestCase):
         self.assertEqual(limpio.count("<p>"), 1)
 
 
+    def test_privacidad(self):
+        texto = ("<p>Ing. Ejemplo / nombre.apellido@gmail.com Cel. 15-0000-0000</p>"
+                 "<p>Escribinos a consultas@magyp.gob.ar o a info@colegio.org.ar</p>")
+        limpio = exportar_web.sanitizar(texto)
+        self.assertNotIn("gmail", limpio)
+        self.assertNotIn("0000-0000", limpio)
+        self.assertIn("[correo omitido]", limpio)
+        self.assertIn("[teléfono omitido]", limpio)
+        self.assertIn("consultas@magyp.gob.ar", limpio)
+        self.assertIn("info@colegio.org.ar", limpio)
+        self.assertEqual(exportar_web.privacidad("Mesa de entradas: 0800-333-4444"), "Mesa de entradas: 0800-333-4444")
+
+
 class ExportarTest(BaseDB):
     def test_solo_campos_publicos(self):
         resumen = tad.Resumen()

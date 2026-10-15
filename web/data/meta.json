@@ -1,0 +1,11 @@
+{
+ "fecha_corte": "2026-10-15",
+ "max_fecha_publicacion_tad": "2026-08-20",
+ "ultimas_corridas": {
+  "api_tad": "2026-10-13",
+  "csv_tad": "2026-10-12",
+  "extraccion_html_tad": "2026-10-13",
+  "ficha_argentina_gob_ar": "2026-10-15",
+  "inventario": "2026-10-13"
+ }
+}
