@@ -39,6 +39,12 @@ export default function PaginaMetodologia() {
           con variantes. Con esta regla, la base tiene <strong>{num(t.tramites)} trámites vigentes</strong> y {num(t.variantes)} variantes.
         </p>
         <p>No se cuentan: los trámites dados de baja ({num(t.bajas)}), los que se fusionaron en otro como variante y {num(t.prueba)} trámites del catálogo oficial que parecen ser pruebas de la plataforma.</p>
+        <p>
+          Tampoco se cuentan {num(t.consultas)} <strong>servicios de consulta</strong>: páginas que permiten ver un dato
+          (el padrón electoral, el calendario de pagos de ANSES, el estado de un expediente) sin pedirle nada al
+          organismo. Aparecen en el buscador, marcados, pero quedan fuera de los totales y los gráficos. Las consultas
+          formales que el organismo responde con un acto propio, como la clasificación de un producto, sí son trámites.
+        </p>
 
         <h2>Fuentes</h2>
         <ol>
@@ -65,8 +71,9 @@ export default function PaginaMetodologia() {
         </ol>
         <p>
           Cuando dos fuentes hablan del mismo trámite se unen en una sola ficha: por el número de TAD cuando la ficha de
-          argentina.gob.ar lo enlaza, o por similitud del nombre dentro del mismo ministerio, con revisión manual de los
-          casos dudosos.
+          argentina.gob.ar lo enlaza, o por similitud del nombre dentro del mismo ministerio. Los casos dudosos se
+          revisan a mano y la decisión queda versionada en el repositorio. Las fichas que no se vinculan con ningún
+          trámite existente se suman como trámites nuevos.
         </p>
 
         <h2>Organismos</h2>
@@ -88,6 +95,10 @@ export default function PaginaMetodologia() {
           <li><strong>Confianza baja:</strong> por las etiquetas temáticas de TAD o, en último caso, por el ministerio. La ficha de cada trámite lo indica.</li>
         </ul>
         <p>Si ninguna regla aplica, el trámite queda sin categoría en lugar de forzarlo en una equivocada.</p>
+        <p>
+          Los canales (en línea, presencial, por correo) salen del catálogo de TAD, de los botones de inicio de cada
+          ficha y, si no los hay, del texto de «¿Cómo hago?». También es una lectura heurística del texto.
+        </p>
 
         <h2>Requisitos y costos</h2>
         <p>

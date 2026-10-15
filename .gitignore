@@ -1,5 +1,5 @@
 # Descargas crudas (se regeneran con las ingestas), backups y material privado
-data/
+/data/
 backups/
 privado/
 *.dump
@@ -20,6 +20,8 @@ node_modules/
 web/.next/
 web/out/
 web/next-env.d.ts
+# Copia de web/data/tramites.json que se arma en el build (npm run prebuild)
+web/public/datos/tramites.json
 .vercel
 
 # Editores y sistema

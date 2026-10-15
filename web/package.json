@@ -6,7 +6,9 @@
     "node": ">=20"
   },
   "scripts": {
+    "predev": "node scripts/copiar-datos.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copiar-datos.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

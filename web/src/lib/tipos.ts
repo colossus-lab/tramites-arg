@@ -56,6 +56,8 @@ export interface Tramite {
   descripcion: string | null;
   estado: "vigente" | "baja" | "migrado" | "suspendido" | "fusionado";
   prueba: boolean;
+  /** 'consulta': servicio informativo (ver el padrón, el calendario de pagos); no cuenta como trámite. */
+  naturaleza: "tramite" | "consulta";
   organismo: OrganismoRef;
   categoria: { codigo: string; nombre: string } | null;
   categoria_confianza: "manual" | "alta" | "baja" | null;
@@ -98,6 +100,7 @@ export interface FilaIndice {
   g: "gratuito" | "arancelado" | null; // costo
   e: Tramite["estado"];
   x: boolean; // trámite de prueba
+  k: boolean; // servicio de consulta
 }
 
 export interface Agregados {
@@ -107,6 +110,9 @@ export interface Agregados {
     ministerios: number;
     online_pct: number;
     presencial_pct: number;
+    solo_presencial_pct: number;
+    canal_sin_dato_pct: number;
+    top10_organismos_pct: number;
     arancelados_pct: number;
     gratuitos_pct: number;
     costo_sin_dato_pct: number;
@@ -117,12 +123,14 @@ export interface Agregados {
     variantes: number;
     bajas: number;
     prueba: number;
+    consultas: number;
     por_fuente: Record<string, number>;
   };
   por_categoria: { codigo: string; nombre: string; tramites: number }[];
   por_ministerio: { slug: string; sigla: string | null; nombre: string; tramites: number }[];
   por_organismo: { slug: string; sigla: string | null; nombre: string; tramites: number }[];
   por_plataforma: { plataforma: string; tramites: number }[];
+  por_modalidad: { modalidad: string; tramites: number }[];
   autenticacion: { metodo: string; tramites: number }[];
   por_destinatario: { tipo: string; tramites: number }[];
   por_anio_publicacion_tad: { anio: string; tramites: number }[];

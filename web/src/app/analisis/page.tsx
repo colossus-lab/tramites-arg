@@ -5,7 +5,7 @@ import { Barras } from '@/components/Grafico';
 import Seccion, { Escala } from '@/components/Seccion';
 import Treemap from '@/components/Treemap';
 import { agregados, contables } from '@/lib/datos';
-import { AUTENTICACION, DESTINATARIOS, MODALIDADES, fecha, monto, num, pct } from '@/lib/formato';
+import { AUTENTICACION, DESTINATARIOS, fecha, monto, num, pct } from '@/lib/formato';
 
 export const metadata: Metadata = {
   title: 'Análisis',
@@ -18,10 +18,6 @@ export default function PaginaAnalisis() {
   const t = a.totales;
   const lista = contables();
 
-  const modalidades = new Map<string, number>();
-  for (const x of lista) {
-    for (const m of new Set(x.canales.map((c) => c.modalidad))) modalidades.set(m, (modalidades.get(m) ?? 0) + 1);
-  }
   const sinCanal = lista.filter((x) => x.canales.length === 0).length;
 
   return (
@@ -32,7 +28,7 @@ export default function PaginaAnalisis() {
           <h1 className="ed-display">Cómo son los trámites del Estado Nacional.</h1>
           <p className="ed-lead">
             {num(t.tramites)} trámites vigentes. Los porcentajes se calculan sobre ese total, sin contar variantes,
-            bajas ni trámites de prueba. Ver la <Link href="/metodologia" className="ta-enlace">metodología</Link>.
+            bajas, trámites de prueba ni servicios de consulta. Ver la <Link href="/metodologia" className="ta-enlace">metodología</Link>.
           </p>
         </header>
       </div>
@@ -58,13 +54,12 @@ export default function PaginaAnalisis() {
       </Seccion>
 
       <Seccion numero="III." eyebrow="Digitalización" titulo={<>Por dónde <em>se hacen.</em></>}
-               bajada="Un trámite puede tener más de un canal: por eso los porcentajes suman más de cien.">
+               bajada="Un trámite puede tener más de un canal y más de una forma de identificarse.">
         <div className="ta-grilla-2">
           <div className="ta-panel">
             <h3>Modalidad</h3>
-            <p>{num(sinCanal)} trámites no informan cómo se hacen.</p>
-            <Barras datos={[...modalidades.entries()].sort((x, y) => y[1] - x[1])
-              .map(([m, v]) => ({ etiqueta: MODALIDADES[m] ?? m, valor: v }))} etiquetaAncho={110} />
+            <p>Cada trámite cuenta una sola vez. {num(sinCanal)} no informan cómo se hacen.</p>
+            <Barras datos={a.por_modalidad.map((m) => ({ etiqueta: m.modalidad, valor: m.tramites }))} etiquetaAncho={170} />
           </div>
           <div className="ta-panel">
             <h3>Plataforma</h3>
@@ -130,7 +125,7 @@ export default function PaginaAnalisis() {
       </Seccion>
 
       <Seccion numero="VI." eyebrow="En el tiempo" titulo={<>Cuándo llegaron <em>a TAD.</em></>}
-               bajada="Año de publicación de cada trámite vigente en la plataforma de Trámites a Distancia.">
+               bajada="Año de publicación en la plataforma de Trámites a Distancia. Solo incluye los trámites que están en TAD, y entre ellos los que siguen vigentes.">
         <Barras horizontal={false} datos={a.por_anio_publicacion_tad.map((x) => ({ etiqueta: x.anio, valor: x.tramites }))} />
       </Seccion>
 

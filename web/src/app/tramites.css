@@ -29,6 +29,8 @@ main { min-height: 60vh; }
 .ta-hallazgos > :nth-child(2) .ta-hallazgo-num { color: var(--ed-vermilion); }
 .ta-hallazgos > :nth-child(3) .ta-hallazgo-num { color: var(--ed-chrome); }
 .ta-hallazgos > :nth-child(4) .ta-hallazgo-num { color: var(--ed-ink); }
+.ta-hallazgos > :nth-child(5) .ta-hallazgo-num { color: var(--ed-vermilion); }
+.ta-hallazgos > :nth-child(6) .ta-hallazgo-num { color: var(--ed-chrome); }
 .ta-hallazgo-titulo { font-family: var(--ed-display); font-size: 1.15rem; font-weight: 700; margin: 0.75rem 0 0.5rem; color: var(--ed-ink); }
 .ta-hallazgo-texto { color: var(--ed-ink-2); font-size: 0.95rem; line-height: 1.55; max-width: 46ch; }
 .ta-mas { margin-top: 2.5rem; display: flex; gap: 2rem; flex-wrap: wrap; }

@@ -14,12 +14,30 @@ export default function Inicio() {
   const claveFiscal = a.autenticacion.find((x) => x.metodo === 'clave_fiscal')?.tramites ?? 0;
   const primerMinisterio = a.por_ministerio[0];
   const top3 = a.por_ministerio.slice(0, 3).reduce((s, x) => s + x.tramites, 0);
+  const destinatario = (tipo: string) => a.por_destinatario.find((x) => x.tipo === tipo)?.tramites ?? 0;
+  const empresas = destinatario('empresa');
+  const personas = destinatario('pf_ciudadano');
 
   const hallazgos = [
     {
       n: pct((top3 / t.tramites) * 100),
       titulo: 'de los trámites se concentra en tres ministerios',
       texto: `${primerMinisterio.nombre} encabeza con ${num(primerMinisterio.tramites)} trámites, entre los que atiende el propio ministerio y sus organismos.`,
+    },
+    {
+      n: `${(empresas / Math.max(personas, 1)).toLocaleString('es-AR', { maximumFractionDigits: 1 })} a 1`,
+      titulo: 'trámites para empresas por cada uno para personas',
+      texto: `${num(empresas)} trámites están dirigidos a empresas y ${num(personas)} a personas. El catálogo nacional es, sobre todo, regulatorio: habilitaciones, registros e inscripciones.`,
+    },
+    {
+      n: pct(t.solo_presencial_pct),
+      titulo: 'de los trámites solo se puede hacer en persona',
+      texto: `El ${pct(t.online_pct)} se puede iniciar en línea, casi siempre por Trámites a Distancia. Los presenciales salen de las fichas de argentina.gob.ar: oficinas, mesas de entradas y turnos.`,
+    },
+    {
+      n: pct(t.top10_organismos_pct),
+      titulo: 'de los trámites los atienden solo diez organismos',
+      texto: `Hay ${num(t.organismos)} organismos con al menos un trámite, pero la mayoría tiene muy pocos: la carga se concentra en unos pocos reguladores.`,
     },
     {
       n: pct((claveFiscal / t.tramites) * 100),
@@ -31,11 +49,6 @@ export default function Inicio() {
       titulo: 'trámites figuran como “no arancelados” en TAD pero piden pagar',
       texto: 'La marca de arancel del catálogo oficial no siempre coincide con lo que dicen la descripción o la ficha del trámite, donde aparece un monto a pagar.',
     },
-    {
-      n: num(a.cambios_institucionales.length),
-      titulo: 'cambios de organismo entre 2024 y 2026',
-      texto: 'AFIP pasó a ser ARCA, ANMaC a RENAR y ANDIS a la Secretaría Nacional de Discapacidad: la base sigue la cadena de sucesores.',
-    },
   ];
 
   return (
@@ -46,9 +59,9 @@ export default function Inicio() {
                titulo={<>Cuántos trámites tiene <em>el Estado Nacional.</em></>}
                bajada="Cada trámite es una solicitud con un resultado distinto ante un organismo. Las variantes de precio, plazo o tipo de persona no se cuentan aparte.">
         <Escala filas={[
-          { n: num(t.tramites), label: 'Trámites vigentes', detail: `Sin contar ${num(t.variantes)} variantes, ${num(t.bajas)} bajas ni ${num(t.prueba)} trámites de prueba del catálogo oficial.` },
+          { n: num(t.tramites), label: 'Trámites vigentes', detail: `Sin contar ${num(t.variantes)} variantes, ${num(t.bajas)} bajas, ${num(t.prueba)} trámites de prueba ni ${num(t.consultas)} servicios de consulta.` },
           { n: num(t.organismos), label: 'Organismos', detail: `Agrupados en ${num(t.ministerios)} ministerios y secretarías de primer nivel.` },
-          { n: pct(t.online_pct), label: 'Se inician en línea', detail: `${num(tad)} pasan por Trámites a Distancia (TAD).` },
+          { n: pct(t.online_pct), label: 'Se pueden iniciar en línea', detail: `${num(tad)} pasan por Trámites a Distancia (TAD); ${pct(t.solo_presencial_pct)} son solo presenciales.` },
           { n: pct(t.arancelados_pct), label: 'Tienen un costo informado', detail: `La mediana de los aranceles en pesos es de $ ${num(a.costos.mediana)}.` },
         ]} />
       </Seccion>

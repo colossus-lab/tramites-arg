@@ -103,6 +103,7 @@ export default async function PaginaTramite({ params }: Props) {
         {t.descripcion && <p className="ed-lead">{t.descripcion}</p>}
         <div className="ta-etiquetas">
           {t.estado !== 'vigente' && <span className="ta-etiqueta ta-etiqueta--baja">{ESTADOS[t.estado]}</span>}
+          {t.naturaleza === 'consulta' && <span className="ta-etiqueta">Servicio de consulta</span>}
           {t.categoria && <span className="ta-etiqueta">{t.categoria.nombre}</span>}
           {[...new Set(t.canales.map((c) => c.modalidad))].map((m) => (
             <span key={m} className="ta-etiqueta ta-etiqueta--celeste">{MODALIDADES[m] ?? m}</span>
@@ -116,6 +117,12 @@ export default async function PaginaTramite({ params }: Props) {
           </p>
         )}
         {t.prueba && <p className="ta-aviso">Figura en el catálogo oficial de TAD pero parece ser un trámite de prueba de la plataforma.</p>}
+        {t.naturaleza === 'consulta' && (
+          <p className="ta-aviso">
+            Es un servicio de consulta: permite ver información sin pedirle nada al organismo, así que no se cuenta
+            como trámite en los análisis.
+          </p>
+        )}
       </header>
 
       <div className="ta-ficha">

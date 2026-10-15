@@ -21,10 +21,12 @@ interface Filtros {
   costo: string;
   entreOrganismos: boolean;
   bajas: boolean;
+  consultas: boolean;
 }
 
 const INICIALES: Filtros = {
   q: '', categoria: '', organismo: '', destinatario: '', modalidad: '', costo: '', entreOrganismos: false, bajas: false,
+  consultas: false,
 };
 
 function desdeQuery(query: string): Filtros {
@@ -33,6 +35,7 @@ function desdeQuery(query: string): Filtros {
     q: p.get('q') ?? '', categoria: p.get('categoria') ?? '', organismo: p.get('organismo') ?? '',
     destinatario: p.get('destinatario') ?? '', modalidad: p.get('modalidad') ?? '', costo: p.get('costo') ?? '',
     entreOrganismos: p.get('entre_organismos') === '1', bajas: p.get('bajas') === '1',
+    consultas: p.get('consultas') === '1',
   };
 }
 
@@ -46,6 +49,7 @@ function aUrl(f: Filtros) {
   if (f.costo) p.set('costo', f.costo);
   if (f.entreOrganismos) p.set('entre_organismos', '1');
   if (f.bajas) p.set('bajas', '1');
+  if (f.consultas) p.set('consultas', '1');
   reemplazarQuery(p.toString());
 }
 
@@ -95,6 +99,7 @@ export default function Buscador({ categorias, organismos }: {
     return indice.filter((t) => {
       if (t.x) return false;
       if (!f.bajas && t.e !== 'vigente') return false;
+      if (!f.consultas && t.k) return false;
       if (!f.entreOrganismos && t.d.length === 1 && t.d[0] === 'organismo_publico') return false;
       if (f.categoria && t.c !== f.categoria) return false;
       if (f.organismo && t.os !== f.organismo) return false;
@@ -139,7 +144,7 @@ export default function Buscador({ categorias, organismos }: {
                    opciones={['pf_ciudadano', 'empresa', 'profesional', 'organizacion_civil', 'cooperativa_mutual',
                               'pf_extranjero_residente', 'emprendedor'].map((k) => [k, DESTINATARIOS[k]])} />
         <Pastillas etiqueta="Cómo" valor={f.modalidad} onCambio={(v) => cambiar({ modalidad: v })}
-                   opciones={['online', 'presencial', 'mixta', 'consular'].map((k) => [k, MODALIDADES[k]])} />
+                   opciones={['online', 'presencial', 'correo', 'consular'].map((k) => [k, MODALIDADES[k]])} />
         <Pastillas etiqueta="Costo" valor={f.costo} onCambio={(v) => cambiar({ costo: v })}
                    opciones={[['gratuito', 'Gratuito'], ['arancelado', 'Con costo'], ['sin_dato', 'Sin dato']]} />
 
@@ -152,6 +157,10 @@ export default function Buscador({ categorias, organismos }: {
           <button type="button" className={`ed-dash-pill${f.bajas ? ' is-active' : ''}`} aria-pressed={f.bajas}
                   onClick={() => cambiar({ bajas: !f.bajas })}>
             Dados de baja
+          </button>
+          <button type="button" className={`ed-dash-pill${f.consultas ? ' is-active' : ''}`} aria-pressed={f.consultas}
+                  onClick={() => cambiar({ consultas: !f.consultas })}>
+            Servicios de consulta
           </button>
           {hayFiltros && (
             <button type="button" className="ed-dash-clear" onClick={() => cambiar(INICIALES)}>Limpiar filtros</button>
@@ -177,6 +186,7 @@ export default function Buscador({ categorias, organismos }: {
                 {t.g === 'arancelado' && <span className="ta-etiqueta ta-etiqueta--acento">Con costo</span>}
                 {t.g === 'gratuito' && <span className="ta-etiqueta">Gratuito</span>}
                 {t.e !== 'vigente' && <span className="ta-etiqueta ta-etiqueta--baja">Dado de baja</span>}
+                {t.k && <span className="ta-etiqueta">Servicio de consulta</span>}
               </span>
             </Link>
           </li>

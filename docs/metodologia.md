@@ -14,7 +14,10 @@ No cuentan como trámites en los análisis:
 
 - los `fusionado` (variantes de otro trámite; `reemplazado_por_id` apunta al canónico);
 - los `baja` y `migrado`;
-- los trámites de prueba del catálogo de TAD (nombres "Testing de performance", "Prueba adm…").
+- los trámites de prueba del catálogo de TAD (nombres "Testing de performance", "Prueba adm…");
+- los servicios de consulta (`tramite.naturaleza = 'consulta'`): ver el padrón, el calendario de pagos o el estado
+  de un expediente sin pedirle nada al organismo. Las consultas formales que reciben una respuesta propia
+  ("Consulta de clasificación de productos") sí son trámites. Regla en `ingesta/clasificar.py` (`naturaleza`).
 
 ## Fuentes y orden de carga
 
@@ -58,6 +61,10 @@ Reglas en `ingesta/clasificar.py` y `ingesta/destinatarios.py`, con tests. Prior
 categoría: comercio exterior por nombre → organismo → palabras clave → etiqueta temática de TAD →
 ministerio. `categoria_regla` permite auditar las de baja confianza (`etiqueta`, `ministerio`).
 Ninguna regla automática pisa una asignación manual.
+
+Canales de las fichas: botones de inicio (plataforma por dominio) y, si no hay, el texto de "¿Cómo hago?"
+(TAD, Mi Argentina, plataforma web, correo electrónico, correo postal, mesa de entradas, turnos). El canal TAD
+de un trámite vinculado lo aporta el CSV y no se duplica.
 
 ## Limitaciones conocidas
 

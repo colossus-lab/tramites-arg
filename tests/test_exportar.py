@@ -46,3 +46,10 @@ class ExportarTest(BaseDB):
         for t in tramites:
             self.assertLessEqual(set(t), exportar_web.CAMPOS_TRAMITE)
         self.assertEqual(agregados["totales"]["tramites"], 4)
+
+    def test_consultas_no_cuentan(self):
+        t = {"estado": "vigente", "prueba": False, "naturaleza": "tramite"}
+        self.assertTrue(exportar_web.contable(t))
+        self.assertFalse(exportar_web.contable({**t, "naturaleza": "consulta"}))
+        self.assertFalse(exportar_web.contable({**t, "prueba": True}))
+        self.assertFalse(exportar_web.contable({**t, "estado": "baja"}))

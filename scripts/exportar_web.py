@@ -30,7 +30,7 @@ DATA = RAIZ / "web" / "data"
 DESCARGAS = RAIZ / "web" / "public" / "datos"
 
 CAMPOS_TRAMITE = {
-    "slug", "nombre", "descripcion", "estado", "prueba", "organismo", "categoria", "categoria_confianza",
+    "slug", "nombre", "descripcion", "estado", "prueba", "naturaleza", "organismo", "categoria", "categoria_confianza",
     "destinatarios", "variantes", "canales", "requisitos", "costos", "fuentes", "descripciones",
     "reemplazado_por", "fecha_publicacion_tad", "fecha_verificacion", "norma",
 }
@@ -124,7 +124,7 @@ def exportar(cur):
 
     # Trámites -----------------------------------------------------------------
     tramites = consultar(cur, """
-        SELECT t.id, t.slug, t.nombre_ciudadano AS nombre, t.descripcion, t.estado, t.organismo_id,
+        SELECT t.id, t.slug, t.nombre_ciudadano AS nombre, t.descripcion, t.estado, t.naturaleza, t.organismo_id,
                c.codigo AS categoria, c.nombre AS categoria_nombre, t.categoria_origen, t.categoria_regla,
                t.reemplazado_por_id, t.norma_base AS norma, t.fecha_ultima_verificacion,
                (SELECT (f.datos ->> 'fecha_publicacion')::date FROM fuente f
@@ -233,6 +233,7 @@ def exportar(cur):
             "slug": t["slug"], "nombre": t["nombre"], "descripcion": t["descripcion"], "estado": t["estado"],
             # Por nombre: la repartición TESTSADE también inicia algún trámite real (p. ej. TAD 4598).
             "prueba": bool(PRUEBA.search(t["nombre"] or "")),
+            "naturaleza": t["naturaleza"],  # 'consulta': servicio informativo, no cuenta como trámite
             "organismo": org_publico(t["organismo_id"]),
             "categoria": {"codigo": t["categoria"], "nombre": t["categoria_nombre"]} if t["categoria"] else None,
             "categoria_confianza": "manual" if t["categoria_origen"] == "manual" else CONFIANZA.get(t["categoria_regla"]),
@@ -262,8 +263,13 @@ def costo_resumen(t):
     return None
 
 
+def contable(t):
+    """Cuenta como trámite: vigente, no es de prueba ni un servicio de consulta."""
+    return t["estado"] == "vigente" and not t["prueba"] and t["naturaleza"] == "tramite"
+
+
 def agregar(tramites, organismos, por_id, raiz, cur):
-    contables = [t for t in tramites if t["estado"] == "vigente" and not t["prueba"]]
+    contables = [t for t in tramites if contable(t)]
     total = len(contables)
 
     def pct(k):
@@ -271,6 +277,15 @@ def agregar(tramites, organismos, por_id, raiz, cur):
 
     online = sum(any(c["modalidad"] in ("online", "mixta") for c in t["canales"]) for t in contables)
     presencial = sum(any(c["modalidad"] in ("presencial", "mixta", "consular") for c in t["canales"]) for t in contables)
+    modos = Counter()
+    for t in contables:
+        m = {c["modalidad"] for c in t["canales"]}
+        en_linea = bool(m & {"online", "mixta"})
+        en_persona = bool(m & {"presencial", "mixta", "consular"})
+        modos["Solo en línea" if en_linea and not en_persona else "En línea o presencial" if en_linea
+              else "Solo presencial" if en_persona else "Por correo" if "correo" in m else "Sin dato"] += 1
+    por_organismo_todos = Counter(t["organismo"]["slug"] for t in contables)
+    top10 = sum(k for _, k in por_organismo_todos.most_common(10))
     costo = Counter(costo_resumen(t) for t in contables)
     con_requisitos = sum(bool(t["requisitos"]) for t in contables)
     con_categoria = sum(bool(t["categoria"]) for t in contables)
@@ -352,6 +367,8 @@ def agregar(tramites, organismos, por_id, raiz, cur):
         "totales": {
             "tramites": total, "organismos": len(por_organismo), "ministerios": len(por_ministerio),
             "online_pct": pct(online), "presencial_pct": pct(presencial),
+            "solo_presencial_pct": pct(modos["Solo presencial"]), "canal_sin_dato_pct": pct(modos["Sin dato"]),
+            "top10_organismos_pct": pct(top10),
             "arancelados_pct": pct(costo["arancelado"]), "gratuitos_pct": pct(costo["gratuito"]),
             "costo_sin_dato_pct": pct(costo[None]), "con_requisitos_pct": pct(con_requisitos),
             "con_categoria_pct": pct(con_categoria), "con_destinatario_pct": pct(con_destinatario),
@@ -359,6 +376,7 @@ def agregar(tramites, organismos, por_id, raiz, cur):
             "variantes": sum(len(t["variantes"]) for t in contables),
             "bajas": sum(t["estado"] == "baja" for t in tramites),
             "prueba": sum(t["prueba"] for t in tramites),
+            "consultas": sum(t["naturaleza"] == "consulta" and t["estado"] == "vigente" for t in tramites),
             "por_fuente": dict(por_fuente),
         },
         "por_categoria": [{"codigo": c or "sin_categoria", "nombre": nombres_categoria.get(c, "Sin categoría"), "tramites": k}
@@ -368,6 +386,8 @@ def agregar(tramites, organismos, por_id, raiz, cur):
         "por_organismo": [{"slug": s, "sigla": org_por_slug[s]["sigla"], "nombre": org_por_slug[s]["nombre_oficial"],
                            "tramites": k} for s, k in por_organismo.most_common(40)],
         "por_plataforma": [{"plataforma": p, "tramites": k} for p, k in plataformas.most_common()],
+        "por_modalidad": [{"modalidad": m, "tramites": modos[m]} for m in
+                          ("Solo en línea", "En línea o presencial", "Solo presencial", "Por correo", "Sin dato")],
         "autenticacion": [{"metodo": m, "tramites": k} for m, k in autenticacion.most_common()],
         "por_destinatario": [{"tipo": d, "tramites": k} for d, k in destinatarios.most_common()],
         "por_anio_publicacion_tad": [{"anio": a, "tramites": anios[a]} for a in sorted(anios)],
@@ -410,7 +430,7 @@ def main():
     finally:
         conn.close()
 
-    por_organismo = Counter(t["organismo"]["slug"] for t in tramites if t["estado"] == "vigente" and not t["prueba"])
+    por_organismo = Counter(t["organismo"]["slug"] for t in tramites if contable(t))
     usados = {o["slug"] for o in organismos if por_organismo.get(o["slug"])}
     # Incluir ancestros y sucesores de organismos con trámites (para la jerarquía y los cambios institucionales).
     ids_usados = {o["id"] for o in organismos if o["slug"] in usados}
@@ -435,7 +455,7 @@ def main():
         "s": t["slug"], "n": t["nombre"], "o": t["organismo"]["sigla"] or t["organismo"]["nombre"],
         "os": t["organismo"]["slug"], "c": (t["categoria"] or {}).get("codigo"), "d": t["destinatarios"],
         "m": sorted({c["modalidad"] for c in t["canales"]}), "p": sorted({c["plataforma"] for c in t["canales"] if c["plataforma"]}),
-        "g": costo_resumen(t), "e": t["estado"], "x": t["prueba"],
+        "g": costo_resumen(t), "e": t["estado"], "x": t["prueba"], "k": t["naturaleza"] == "consulta",
     } for t in tramites]
 
     meta = {"fecha_corte": date.today().isoformat(), "max_fecha_publicacion_tad": max_publicacion.isoformat()
@@ -451,9 +471,9 @@ def main():
     }
 
     escribir_csv(DESCARGAS / "tramites.csv",
-                 ["slug", "nombre", "estado", "organismo", "ministerio", "categoria", "destinatarios", "modalidades",
+                 ["slug", "nombre", "estado", "naturaleza", "organismo", "ministerio", "categoria", "destinatarios", "modalidades",
                   "plataformas", "costo", "url_tad", "url_ficha"],
-                 [[t["slug"], t["nombre"], t["estado"], t["organismo"]["nombre"],
+                 [[t["slug"], t["nombre"], t["estado"], t["naturaleza"], t["organismo"]["nombre"],
                    (t["organismo"]["ministerio"] or t["organismo"])["nombre"], (t["categoria"] or {}).get("nombre"),
                    ";".join(t["destinatarios"]), ";".join(sorted({c["modalidad"] for c in t["canales"]})),
                    ";".join(sorted({c["plataforma_nombre"] for c in t["canales"] if c["plataforma_nombre"]})),
@@ -472,7 +492,8 @@ def main():
     escribir_csv(DESCARGAS / "organismos.csv", ["slug", "sigla", "nombre", "tipo", "depende_de", "sucesor", "tramites"],
                  [[o["slug"], o["sigla"] or "", o["nombre"], o["tipo"] or "", o["padre"] or "", o["sucesor"] or "", o["tramites"]]
                   for o in organismos_publicos])
-    escribir_json(DESCARGAS / "tramites.json", [t for t in tramites if not t["prueba"]])
+    # La descarga tramites.json es una copia de web/data/tramites.json que arma el build de la web
+    # (web/scripts/copiar-datos.mjs), así no se versiona dos veces.
 
     print(f"Exportados {len(tramites)} trámites ({agregados['totales']['tramites']} contables), "
           f"{len(organismos_publicos)} organismos.")

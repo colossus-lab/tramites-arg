@@ -25,7 +25,8 @@ export function tramite(slug: string): Tramite | undefined {
 
 /** Trámites que cuentan en los análisis: vigentes y que no son de prueba. */
 export function contables(): Tramite[] {
-  return tramites().filter((t) => t.estado === "vigente" && !t.prueba);
+  // Igual que contable() en scripts/exportar_web.py: sin bajas, pruebas ni servicios de consulta.
+  return tramites().filter((t) => t.estado === "vigente" && !t.prueba && t.naturaleza === "tramite");
 }
 
 export function organismos(): Organismo[] {
