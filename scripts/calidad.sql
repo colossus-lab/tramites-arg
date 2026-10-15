@@ -39,6 +39,13 @@ ORDER BY 1;
 \echo '== Trámites de prueba del catálogo de TAD (se excluyen de los análisis)'
 SELECT t.slug, t.nombre_ciudadano FROM tramite t WHERE t.nombre_ciudadano ~* 'testing de performance|prueba adm';
 
+\echo '== Servicios de consulta (no cuentan como trámite)'
+SELECT naturaleza_origen, count(*) FROM tramite WHERE naturaleza = 'consulta' GROUP BY 1;
+
+\echo '== Trámites de fichas sin organismo informado en las migas'
+SELECT t.slug, t.nombre_ciudadano FROM tramite t JOIN organismo o ON o.id = t.organismo_id
+WHERE o.nombre_oficial = 'Organismo no informado en argentina.gob.ar';
+
 \echo '== Fichas de argentina.gob.ar vinculadas a un trámite fusionado o dado de baja'
 SELECT f.id_externo, t.estado, t.nombre_ciudadano FROM fuente f JOIN tramite t ON t.id = f.tramite_id
 WHERE f.tipo = 'ficha_argentina_gob_ar' AND t.estado <> 'vigente';

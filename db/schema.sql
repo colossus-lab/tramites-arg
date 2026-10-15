@@ -122,6 +122,9 @@ CREATE TABLE tramite (
     categoria_id               integer REFERENCES categoria (id),
     categoria_origen           text CHECK (categoria_origen IN ('manual', 'auto')),  -- 'auto' no pisa 'manual'
     categoria_regla            text,  -- regla de ingesta.clasificar que la asignó
+    -- 'consulta': servicio informativo (padrón, calendario de pagos); no cuenta como trámite
+    naturaleza                 text NOT NULL DEFAULT 'tramite' CHECK (naturaleza IN ('tramite', 'consulta')),
+    naturaleza_origen          text CHECK (naturaleza_origen IN ('manual', 'auto')),
     estado                    text NOT NULL DEFAULT 'vigente'
                                CHECK (estado IN ('vigente', 'migrado', 'baja', 'suspendido', 'fusionado')),
     reemplazado_por_id         uuid REFERENCES tramite (id),

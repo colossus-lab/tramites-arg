@@ -27,7 +27,7 @@ from ingesta import normalizar as n
 from ingesta.tad import DATABASE_URL
 
 COMERCIO_EXTERIOR = re.compile(
-    r"IMPORTACI|EXPORTACI|IMPORTAR|EXPORTAR|IMPORTADOR|EXPORTADOR|COMERCIO EXTERIOR|ADUAN|CERTIFICADO DE ORIGEN|"
+    r"IMPORTACI|EXPORTACI|IMPORTAR|EXPORTAR|IMPORTADOR|EXPORTADOR|COMERCIO EXTERIOR|ADUAN|CERTIFICADOS? DE ORIGEN|"
     r"DESTINACI|ZONAS? FRANCAS?|ORIGEN DE MERCADERIA|ORIGEN (NO )?PREFERENCIAL|TRANSITO INTERNACIONAL|DRAWBACK|DUMPING|LICENCIAS? NO AUTOMATICA"
 )
 
@@ -62,6 +62,14 @@ POR_ORGANISMO = {
     "RNR": "justicia", "OA": "justicia",
     "AAIP": "transversal",
     "SIYC": "consumo",
+    "RPI": "propiedad", "TTN": "propiedad",
+    "BN": "cultura", "BNM": "cultura", "MNBA": "cultura", "FNA": "cultura", "INAMU": "cultura", "CONABIP": "cultura",
+    "AGN": "cultura",
+    "SPF": "seguridad",
+    "DINE": "identidad",
+    "ONTI": "gestion_publica", "ONC": "gestion_publica",
+    "CNCE": "comercio_exterior",
+    "SECLO": "trabajo",
 }
 
 # Palabras clave sobre el nombre normalizado (n.clave). Gana la primera que coincide.
@@ -69,48 +77,72 @@ PALABRAS_CLAVE = [
     ("discapacidad", r"DISCAPACI"),
     ("armas", r"\bARMAS?\b|EXPLOSIV|MATERIALES CONTROLADOS|LEGITIMO USUARIO"),
     ("migraciones", r"MIGRA|RADICACI|\bVISAS?\b|RESIDENCIA PRECARIA"),
-    ("viajes", r"APOSTILL|LEGALIZACI|CONSULA|PASAPORTE"),
+    ("identidad", r"\bDNI\b|DOCUMENTO NACIONAL DE IDENTIDAD|IDENTIDAD DE GENERO|IDENTIDAD BIOLOGICA|"
+                  r"PADRON ELECTORAL|CIUDADANIA|NATURALIZ"),
+    ("viajes", r"APOSTILL|LEGALIZACI|CONSULA|PASAPORTE|RESIDENCIA EN EL EXTERIOR|FIRMANTES DE DOCUMENTOS PUBLICOS"),
+    # Trámites del Estado consigo mismo: Congreso (PLN), AGN, firma digital de autoridades de
+    # registro, integración de sistemas, facturas de proveedores de un organismo.
+    ("gestion_publica", r"^PLN\b|RESOLUCIONES AGN|AUDITORIA GENERAL DE LA NACION|AUTORIDAD(ES)? (DE )?REGISTRO|"
+                        r"\bAC[ -]ONTI\b|AC MODERNIZACION|\bPFDR\b|PLATAFORMA FIRMA DIGITAL REMOTA|AUTENTICAR|"
+                        r"APLICACION CLIENTE|\bVPN\b|FACTURAS? (NO )?VINCULADAS|INVENTARIO NACIONAL DE BIENES|\bINBIST\b|"
+                        r"PROYECTOS TECNOLOGICOS DEL SECTOR PUBLICO|NUBE HIBRIDA|AUTORIDAD CONTABLE|PAUTA PUBLICITARIA|"
+                        r"DECRETOS PRESIDENCIALES|AUTORIDADES ELECTAS|DECLARACION JURADA DE INTERESES|PREVIA CONFORMIDAD|"
+                        r"NOMINA DE FIRMANTES|PROYECTOS PNUD|ASOCIACION DE APLICACION|ALTA LOCAL VIRTUAL|"
+                        r"RESTITUCION DE FONDOS|COLEGIOS DE ESCRIBANOS|^MUNICIPIOS$"),
     ("propiedad_intelectual", r"PROPIEDAD INTELECTUAL|\bMARCAS?\b|PATENTE|DERECHO DE AUTOR|OBRAS? INEDITA|"
                               r"CULTIVAR|PUBLICACION PERIODICA"),
     ("seguridad_social", r"JUBILACI|PENSION|PREVISIONAL|HABER(ES)? DE (RETIRO|PASIVIDAD)|RETIRO MILITAR"),
+    ("programas_sociales", r"ASIGNACION UNIVERSAL|\bAUH\b|AYUDA ESCOLAR|ASIGNACION(ES)? FAMILIAR|ASIGNACION POR|"
+                           r"PROGRAMA HOGAR|GARRAFA|AYUDAS? DIRECTAS|ASISTENCIA ECONOMICA|EFECTOR(ES)? SOCIAL|"
+                           r"MICROCREDITO|SUBSIDIO DE LA|\bPROGRESAR\b|100% NUESTRO|TARIFA SOCIAL"),
     ("vehiculos", r"VEHICUL|AUTOMOTOR|LICENCIA DE CONDUCIR|MOTOVEHICUL"),
     ("energia", r"ENERG|ELECTRIC|\bGAS\b|GAS NATURAL|\bGNC\b|\bGLP\b|GASODUCTO|HIDROCARBUR|PETROL|COMBUSTIBLE|"
                 r"NUCLEAR|RENOVABLE"),
     ("trabajo", r"\bEMPLEO|TRABAJADOR|LABORAL|SINDICA|GREMIAL|CONVENIO COLECTIVO|PASANTIA|\bTRABAJO\b|"
-                r"TELETRABAJO|RECIBOS? DE SUELDO|\bSECLO\b|PREVENTIVO DE CRISIS|FORMACION PROFESIONAL"),
+                r"TELETRABAJO|RECIBOS? DE SUELDO|\bSECLO\b|PREVENTIVO DE CRISIS|FORMACION PROFESIONAL|\bREPRO\b|"
+                r"CUIDADORES|CHOFERES|GUARDAVIDAS"),
     # "Investigación" sola no: "investigación de origen" (comercio), "comisiones investigadoras" (Congreso).
     ("ciencia_tecnologia", r"CIENTIFIC|CIENCIA|INVESTIGACION CIENTIFICA|PROYECTOS DE INVESTIGACION|"
                            r"\bINVESTIGADOR(ES)?\b|INNOVACION|DESARROLLO TECNOLOGICO|ROECYT|BIOTECNOLOG|NANOTECNOLOG"),
     ("educacion", r"EDUCA|ESCUELA|UNIVERSI|\bTITULOS?\b|CONVALIDACI|\bBECAS?\b|ESTUDIANT|DOCENTE|PLANES DE ESTUDIO|"
-                  r"POS(T)?GRADO|CARRERAS? DE GRADO"),
+                  r"POS(T)?GRADO|CARRERAS? DE GRADO|SECUNDARIO|TERCIARIO|BRAILLE|DIDACTIC|CAPACITACIONES GDE|"
+                  r"^INSCRIBIRSE EN (?!EL |LA |LOS |LAS )"),  # cursos: "Inscribirse en Visualización de Datos"
     ("salud", r"SALUD|\bMEDIC(O|A|OS|AS|AMENTOS?|INA)\b|HOSPITAL|SANITARI|FARMAC|DROGUER|ODONTOLOG|ENFERMER|"
               r"VACUN|OBRA SOCIAL"),
-    ("cultura", r"CULTUR|ARTIST|MUSEO|\bLIBROS?\b|BIBLIO|CONABIP|LECTORES|GUIONISTA|AUDIOVISUAL|\bCINE|TEATRO|MUSICA|"
+    ("cultura", r"CULTUR|ARTIST|MUSEO|INCAA|CREATIVAS|DOMINIO PUBLICO|\bLIBROS?\b|BIBLIO|CONABIP|LECTORES|GUIONISTA|AUDIOVISUAL|\bCINE|TEATRO|MUSICA|"
                 r"PATRIMONIO (CULTURAL|HISTORICO)"),
-    ("familia", r"NINEZ|\bNIN(A|O)S?\b|ADOLESCEN|FAMILIA|ADOPCI|MATRIMONIO|PRIMERA INFANCIA"),
+    ("familia", r"NINEZ|\bNIN(A|O)S?\b|ADOLESCEN|FAMILIA|ADOPCI|MATRIMONIO|PRIMERA INFANCIA|\bHIJ(A|O)S\b"),
     ("empresas", r"SIPRO|PROVEEDOR"),  # registro de proveedores del Estado, aunque nombre cooperativas
-    ("organizaciones", r"COOPERATIV|MUTUAL|ASOCIACION(ES)? CIVIL|FUNDACI|BIEN PUBLICO|BOMBEROS|REGISTRO NACIONAL DE CULTOS|RELIGIOS"),
-    ("consumo", r"CONSUMIDOR|LEALTAD COMERCIAL"),
+    ("organizaciones", r"CLUBES DE BARRIO|COOPERATIV|MUTUAL|ASOCIACION(ES)? CIVIL|FUNDACI|BIEN PUBLICO|BOMBEROS|REGISTRO NACIONAL DE CULTOS|RELIGIOS"),
+    ("consumo", r"CONSUMIDOR|LEALTAD COMERCIAL|TARJETAS? DE CREDITO|\bNO LLAME\b|\bSIPRE\b|INFORMAR LOS PRECIOS"),
     ("finanzas", r"\bSEGUROS?\b|ASEGURADOR|REASEGUR|FINANCIER|MERCADO DE CAPITALES|FONDOS? COMUN|FIDEICOMISO|"
                  r"CAPITALIZACION Y AHORRO"),
     ("transporte", r"TRANSPORT|FERROVI|FERROCARRIL|AEROPUERT|AERONAV|AEROCLUB|\bPUERTOS?\b|PORTUARI|BUQUE|"
                    r"EMBARCACI|NAVEGACI|NAUTIC|PEAJE"),
     ("ambiente", r"AMBIENT|RESIDUO|FORESTAL|BOSQUE|FAUNA|FLORA|CLIMA|EMISION|EFLUENTE|PARQUES? NACIONAL|"
-                 r"BIODIVERSIDAD|\bPCB\b|OZONO|SUSTENTABLE|MEDIDAS EFICACES DE CONSERVACION"),
+                 r"BIODIVERSIDAD|\bPCB\b|OZONO|SUSTENTABLE|MEDIDAS EFICACES DE CONSERVACION|CONVENIO DE ESTOCOLMO|"
+                 r"ANTARTIDA|SIN VUELCO|MOVIMIENTO TRANSFRONTERIZO|DESTRUCCION DE MERCADERIAS"),
     ("agro", r"AGRO|AGRIC|GANAD|PESCA|PESQUER|SEMILLA|CULTIVO|VITIVIN|\bVINOS?\b|BOVIN|PORCIN|AVICOL|APICOL|"
              r"LECHER|\bGRANOS?\b|FITOSANIT|ZOOSANIT"),
-    ("telecomunicaciones", r"TELECOMUNIC|INTERNET|RADIODIFUS|TELEVISI|POSTAL|ESPECTRO|SATELIT|"
-                           r"ESTACION(ES)? TERRENA|RADIOASTRONOM|\bM2M\b"),
-    ("justicia", r"JUDICIAL|\bOFICIOS?\b|ANTECEDENTES PENALES|MEDIACI|REINCIDENCIA"),
+    # Después de transporte y agro: "certificado náutico deportivo", "pesca deportiva".
+    ("turismo_deporte", r"TURIS|AGENCIAS? DE VIAJES|\bTERMAS\b|\bUVT\b|\bINTUR\b|DEPORTIV|DEPORTES|"
+                        r"SUSTANCIAS PROHIBIDAS"),
+    ("telecomunicaciones", r"TELECOMUNIC|INTERNET|RADIODIFUS|TELEVISI|POSTAL|ESPECTRO|SATELIT|\bSMM?S\b|"
+                           r"GEOESTACIONARI|ENTE LICENCIANTE|ESTACION(ES)? TERRENA|RADIOASTRONOM|\bM2M\b"),
+    ("justicia", r"JUDICIAL|\bOFICIOS?\b|ANTECEDENTES PENALES|MEDIACI|REINCIDENCIA|DELITO|VIOLENCIA INSTITUCIONAL|"
+                 r"RECLAMO ADMINISTRATIVO"),
     ("impuestos", r"IMPUEST|TRIBUT|\bFISCAL\b|GANANCIAS|MONOTRIBUT"),
-    ("propiedad", r"INMUEBLE|VIVIENDA|CATASTR|TIERRAS? FISCAL|BIENES DEL ESTADO|LOCACION"),
+    ("propiedad", r"INMUEBLE|VIVIENDA|CATASTR|TIERRAS? FISCAL|BIENES DEL ESTADO|LOCACION|MENSURA"),
     ("empresas", r"SOCIEDAD|EMPRESA|PYME|INDUSTRI|INVERSION|REGIMEN DE PROMOCION|PROVEEDOR|SIPRO|PRODUCTIV|"
-                 r"EMPRENDED|\bRIGI\b|CONCENTRACION(ES)? ECONOMICA"),
+                 r"EMPRENDED|\bRIGI\b|CONCENTRACION(ES)? ECONOMICA|CONCESIONARIOS|PRIVATIZACIONES|FONDO ACELERACION|"
+                 r"CASA MATRIZ|CERTIFICACION DE CALIDAD"),
     ("seguridad", r"SEGURIDAD|POLICI|GENDARMER|PREFECTUR|FUERZAS ARMADAS|DEFENSA NACIONAL|MILITAR"),
     ("transversal", r"ACCESO A LA INFORMACION|INFORMACION PUBLICA|TOMA DE VISTA|VISTA DE (LAS )?ACTUACIONES|"
-                    r"PRESENTACION (GENERAL|CIUDADANA)|RECURSO|SOLICITUD GENERAL"),
+                    r"PRESENTACION (GENERAL|CIUDADANA)|RECURSO|SOLICITUD GENERAL|FIRMA DIGITAL|FIRMA(R|DOS)? DIGITALMENTE|"
+                    r"MESA DE ENTRADAS|VISTA DE UN EXPEDIENTE|CERTIFICADO DE CUMPLIMIENTO"),
 ]
 PALABRAS_CLAVE = [(codigo, re.compile(patron)) for codigo, patron in PALABRAS_CLAVE]
+PROGRAMAS_SOCIALES = next(patron for codigo, patron in PALABRAS_CLAVE if codigo == "programas_sociales")
 
 POR_ETIQUETA = {
     "SALUD Y SEGURIDAD SOCIAL": "salud",
@@ -139,6 +171,9 @@ def clasificar(nombre, organismo, ministerio, etiquetas):
     k = n.clave(nombre or "")
     if COMERCIO_EXTERIOR.search(k):
         return "comercio_exterior", "comercio_exterior"
+    # ANSES atiende jubilaciones y también asignaciones: las asignaciones ganan sobre el organismo.
+    if PROGRAMAS_SOCIALES.search(k):
+        return "programas_sociales", "palabra_clave"
     if organismo in POR_ORGANISMO:
         return POR_ORGANISMO[organismo], "organismo"
     for codigo, patron in PALABRAS_CLAVE:
@@ -151,6 +186,21 @@ def clasificar(nombre, organismo, ministerio, etiquetas):
     if organismo == ministerio and ministerio in POR_MINISTERIO:
         return POR_MINISTERIO[ministerio], "ministerio"
     return None, None
+
+
+# Servicios de consulta: ver un dato propio o público sin pedir nada al organismo.
+CONSULTA = re.compile(
+    r"^(CONSULTAR? (EL|LA|LOS|LAS|TU|SI|CUANDO|ESTADO|MI|CONDUCTORES|CONVENIOS|LICITACIONES|MATERIAL|PUBLICACIONES|"
+    r"DECLARACIONES JURADAS DE FUNCIONARIOS)\b|CONSULTA (DE|DEL|MIS|PRESENCIAL|PUBLICA DE)\b|CONOCER\b|VALIDA\b|"
+    r"SIMULA\b|CALCULAR\b)"
+)
+# Consultas formales que el organismo responde con un acto propio: son trámites.
+CONSULTA_FORMAL = re.compile(r"^CONSULTA DE CLASIFICACION")
+
+
+def naturaleza(nombre):
+    k = n.clave(nombre or "")
+    return "consulta" if CONSULTA.search(k) and not CONSULTA_FORMAL.search(k) else "tramite"
 
 
 def main(argv=None):
@@ -194,6 +244,17 @@ def main(argv=None):
                     cambios += 1
             cur.execute("SELECT count(*) FROM tramite WHERE categoria_origen = 'manual'")
             manuales = cur.fetchone()[0]
+
+            cur.execute("SELECT id, nombre_ciudadano, naturaleza FROM tramite "
+                        "WHERE naturaleza_origen IS DISTINCT FROM 'manual'")
+            consultas = 0
+            for tramite_id, nombre, actual in cur.fetchall():
+                deseada = naturaleza(nombre)
+                consultas += deseada == "consulta"
+                if deseada != actual:
+                    cur.execute("UPDATE tramite SET naturaleza = %s, naturaleza_origen = 'auto' WHERE id = %s",
+                                (deseada, tramite_id))
+                    cambios += 1
             if args.dry_run:
                 conn.rollback()
     finally:
@@ -201,7 +262,7 @@ def main(argv=None):
 
     total = sum(por_regla.values())
     print(f"\n{'Simulación' if args.dry_run else 'Clasificación'}: {total} trámites automáticos "
-          f"(+{manuales} con categoría manual) | cambios: {cambios}")
+          f"(+{manuales} con categoría manual) | consultas: {consultas} | cambios: {cambios}")
     print("  por regla: " + ", ".join(f"{r} {k} ({k / total:.0%})" for r, k in por_regla.most_common()))
     print("  por categoría:")
     for codigo, k in por_categoria.most_common():

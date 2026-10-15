@@ -52,7 +52,23 @@ PLATAFORMA_POR_HOST = [
     ("arca.gob.ar", "arca"), ("anses.gob.ar", "mi_anses"), ("migraciones.gob.ar", "radex"),
     ("dnrpa.gov.ar", "site_dnrpa"),
 ]
-PRESENCIAL = re.compile(r"\bTURNO|PRESENCIAL|ACERCATE|DIRIGITE|PERSONALMENTE|EN LA OFICINA|EN LAS OFICINAS|SEDE")
+PRESENCIAL = re.compile(r"\bTURNO|PRESENCIAL|ACERCATE|DIRIGITE(?! A LA (COLUMNA|SOLAPA|SECCION|OPCION))|"
+                        r"PERSONALMENTE|EN LA OFICINA|EN LAS OFICINAS|\bSEDE\b(?! SOCIAL)|"
+                        r"MESA DE ENTRADAS(?! (VIRTUAL|DIGITAL))|CENTRO DE ATENCION|DELEGACION(ES)? (DE|DEL)|"
+                        r"VENTANILLA(?! UNICA)|SALA DE LECTURA")
+# Canales online mencionados en el texto de "¿Cómo hago?" cuando la ficha no tiene botón de inicio.
+ONLINE_POR_TEXTO = [
+    ("tad", re.compile(r"TRAMITES A DISTANCIA|\bTAD\b")),
+    ("mi_argentina", re.compile(r"MI ARGENTINA")),
+    ("mi_anses", re.compile(r"MI ANSES")),
+]
+ONLINE_GENERICO = re.compile(
+    r"\bONLINE\b|EN LINEA|FORMULARIO (WEB|ONLINE|EN LINEA|DE INSCRIPCION ONLINE)|PLATAFORMA|\bPORTAL\b|SITIO WEB|"
+    r"PAGINA WEB|CLAVE FISCAL|HACE CLIC|INGRESA(R|NDO)? (A|AL|EN) (LA )?(WEB|PAGINA|SITIO|SISTEMA)"
+)
+POR_MAIL = re.compile(r"(ENVIA(R|NOS|LO|LA)?|REMITI(R)?|MANDA(R)?|SOLICITA(S|R)?)\b.{0,60}(CORREO ELECTRONICO|\bE-?MAIL\b|\bMAIL\b)|"
+                      r"(POR|VIA|AL) (CORREO ELECTRONICO|E-?MAIL|MAIL)\b")
+POR_CORREO_POSTAL = re.compile(r"CORREO POSTAL|POR CORREO (ARGENTINO|POSTAL)|PIEZA POSTAL")
 # Migas que nombran un organismo (las demás son temas: "Minería", "Pequeña y Mediana Empresa").
 MIGA_ORGANISMO = re.compile(
     r"^(MINISTERIO|SECRETARIA|SUBSECRETARIA|INSTITUTO|AGENCIA|DIRECCION|REGISTRO|ADMINISTRACION|COMISION|ENTE|"
@@ -208,15 +224,30 @@ def parsear(html):
 
 
 def canales(datos):
-    """Canales que se deducen de la ficha (el canal TAD ya lo aporta la ingesta del CSV)."""
+    """Canales que se deducen de la ficha: botones de inicio y, si no hay, el texto de "¿Cómo hago?".
+
+    El canal TAD de un trámite vinculado ya lo aporta la ingesta del CSV; Cargador.cargar lo descarta.
+    """
     resultado, plataformas = [], set()
     for url in datos["inicio"]:
         host = urlparse(url).netloc.lower()
         plataforma = next((p for h, p in PLATAFORMA_POR_HOST if h in host), None)
-        if plataforma == "tad" or (plataforma and plataforma in plataformas):
+        if plataforma in plataformas:
             continue  # un canal por plataforma (el primer botón de inicio)
         plataformas.add(plataforma)
         resultado.append({"modalidad": "online", "plataforma": plataforma, "url": url})
+    como = n.clave(BeautifulSoup(datos["secciones"].get("como", ""), "html.parser").get_text(" "))
+    for plataforma, patron in ONLINE_POR_TEXTO:
+        if plataforma not in plataformas and patron.search(como):
+            plataformas.add(plataforma)
+            resultado.append({"modalidad": "online", "plataforma": plataforma})
+    if not plataformas:
+        if ONLINE_GENERICO.search(como):
+            resultado.append({"modalidad": "online"})
+        elif POR_MAIL.search(como):
+            resultado.append({"modalidad": "online", "detalle": "por correo electrónico"})
+    if POR_CORREO_POSTAL.search(como):
+        resultado.append({"modalidad": "correo"})
     texto = n.clave(" ".join(BeautifulSoup(datos["secciones"].get(s, ""), "html.parser").get_text(" ")
                              for s in ("como", "necesito")))
     if PRESENCIAL.search(texto):
@@ -460,12 +491,20 @@ class Cargador:
         self.resumen[evento] += 1
 
         self.cur.execute("DELETE FROM canal WHERE fuente_id = %s", (fuente_id,))
+        # Plataformas que el trámite ya tiene por otra fuente (el canal TAD del CSV): no se duplican.
+        self.cur.execute("SELECT plataforma_id FROM canal WHERE tramite_id = %s AND plataforma_id IS NOT NULL",
+                         (tramite_id,))
+        existentes = {fila[0] for fila in self.cur.fetchall()}
         for c in canales(datos):
+            plataforma_id = self.plataformas.get(c.get("plataforma"))
+            if plataforma_id and plataforma_id in existentes:
+                continue
             self.cur.execute(
-                """INSERT INTO canal (tramite_id, modalidad, plataforma_id, url_inicio, requiere_turno, fuente_id)
-                   VALUES (%s, %s, %s, %s, %s, %s)""",
-                (tramite_id, c["modalidad"], self.plataformas.get(c.get("plataforma")), c.get("url") or url,
-                 c.get("requiere_turno"), fuente_id),
+                """INSERT INTO canal (tramite_id, modalidad, plataforma_id, url_inicio, requiere_turno, detalle,
+                                      fuente_id)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                (tramite_id, c["modalidad"], plataforma_id, c.get("url") or url, c.get("requiere_turno"),
+                 c.get("detalle"), fuente_id),
             )
         requisitos, costos = requisitos_y_costos(datos)
         sincronizar_requisitos(self.cur, fuente_id, tramite_id, requisitos)

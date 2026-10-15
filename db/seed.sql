@@ -51,7 +51,10 @@ INSERT INTO categoria (codigo, nombre) VALUES
     ('transversal',           'Transversal (turnos, credenciales, consultas)'),
     -- Agregadas al clasificar TAD: la taxonomía del informe no las tenía.
     ('energia',               'Energía'),
-    ('ciencia_tecnologia',    'Ciencia y tecnología');
+    ('ciencia_tecnologia',    'Ciencia y tecnología'),
+    -- Agregadas con las fichas de argentina.gob.ar.
+    ('gestion_publica',       'Gestión pública y relación con el Estado'),
+    ('turismo_deporte',       'Turismo y deporte');
 
 INSERT INTO hecho_vital (codigo, nombre) VALUES
     ('nacer',        'Nacer'),

@@ -26,6 +26,16 @@ class DestinatariosTest(unittest.TestCase):
                          {"pf_ciudadano": "palabra_clave", "pf_no_residente": "validador"})
         self.assertEqual(destinatarios("Certificado X", [], "comercio_exterior"), {"empresa": "categoria"})
         self.assertEqual(destinatarios("Certificado X", [], "salud"), {})
+        self.assertEqual(destinatarios("Resoluciones varias", [], "gestion_publica"), {"organismo_publico": "categoria"})
+
+    def test_texto_dirigido_de_la_ficha(self):
+        # El cargador concatena el nombre y el "¿A quién está dirigido?" de la ficha.
+        self.assertEqual(destinatarios("Obtener duplicado A cualquier persona interesada, mayor de 15 años.", [], None),
+                         {"pf_ciudadano": "palabra_clave"})
+        self.assertEqual(destinatarios("Habilitación Todo establecimiento elaborador de alimentos", [], None),
+                         {"empresa": "palabra_clave"})
+        self.assertEqual(set(destinatarios("Registro Personas físicas o jurídicas.", [], None)), {"pf_ciudadano", "empresa"})
+        self.assertNotIn("pf_ciudadano", destinatarios("Licencia (Personas Jurídicas)", [], None))
 
 
 if __name__ == "__main__":
